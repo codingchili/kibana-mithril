@@ -22,8 +22,6 @@ describe('LDAP Implementation', function () {
 
     Server.bind('uid=admin,ou=system', function (req, res, next) {
 
-      // todo handle invalid credentials
-
       res.end();
       return next();
     });
@@ -55,12 +53,12 @@ describe('LDAP Implementation', function () {
     });
   });
 
- /* it('Should fail to bind with an user using wrong password.', function (done) {
+  it('Should fail to bind with an user using wrong password.', function (done) {
     LDAP.authenticate(USERNAME, PASSWORD_WRONG, function (err, user) {
       Assert.equal(null, user);
       done();
     });
-  }); */
+  }); 
 
   it('Should fail to bind with a user that do not exist.', function (done) {
     LDAP.authenticate('missing', PASSWORD, function (err, user) {
