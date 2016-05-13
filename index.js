@@ -77,14 +77,14 @@ module.exports = function (kibana) {
           LDAP.authenticate(username, password, function (err, user) {
               if (err || !user) {
                 reply().code(401);
-              } else if (TwoFactor.verify(username, nonce)) {
-                reply().state('token', signToken(user), cookieOptions);
+              } else if (TwoFactor.verify(user.dn, nonce)) {
+                reply().state('token', signToken(user.dn), cookieOptions);
               } else {
                 // If 2FA fails and a previously used shared secret exists,
                 // return with error set. If no previously shared secret exists
                 // or the previosuly shared secret never has been used -> recreate.
                 reply(
-                  (TwoFactor.enabled(username) ? {"error": (nonce)} : TwoFactor.create(username)))
+                  (TwoFactor.enabled(user.dn) ? {"error": (nonce)} : TwoFactor.create(user.dn)))
                   .code(406);
               }
             }
