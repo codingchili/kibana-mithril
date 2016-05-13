@@ -1,0 +1,14 @@
+{
+  "name": "kbn-authentication-plugin",
+  "version": "0.1.0",
+  "description": "Prevents unauthorized access to kbn dashboards.",
+  "dependencies": {
+    "hapi-auth-basic": "^4.1.0",
+    "hapi-auth-jwt2": "^6.0.0",
+    "jsonwebtoken": "^6.2.0",
+    "ldapjs": "^1.0.0",
+    "pug": "^2.0.0-alpha7",
+    "qr-image": "^3.1.0",
+    "speakeasy": "^2.0.0"
+  }
+}

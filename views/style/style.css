@@ -1,0 +1,118 @@
+html {
+  font-family: "Open Sans", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background-color: #3caed2;
+}
+
+.header-text {
+  margin-top: 12px;
+  margin-left: 12px;
+  display: block;
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(150, 150, 150, 0.78);
+}
+
+.login-box {
+  position: absolute;
+  width: 324px;
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+
+  -webkit-box-shadow: -1px 3px 39px -3px rgba(0, 0, 0, 0.54);
+  -moz-box-shadow: -1px 3px 39px -3px rgba(0, 0, 0, 0.54);
+  box-shadow: -1px 3px 39px -3px rgba(0, 0, 0, 0.54);
+}
+
+.login-box-header {
+  width: 100%;
+  height: 32px;
+  background-color: #FFB300;
+  text-align: center;
+  margin-bottom: 16px;
+  padding-top: 8px;
+}
+
+.login-box-header-text {
+  color: #fff;
+  display: block;
+  margin-top: 4px;
+  font-weight: 700;
+  font-size: 16px;
+  text-shadow: 1px 1px 0 rgba(150, 150, 150, 0.78);
+}
+
+.input-label {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.secret-label {
+  text-align: center;
+  font-size: 12px;
+  display: block;
+}
+
+.input {
+  display: block;
+  width: 95%;
+  margin: auto auto 12px;
+  font-size: 18px;
+  border: 1px solid #999;
+  height: 32px;
+  text-indent: 8px;
+}
+
+.input:focus {
+  border: 1px solid #E91E63;
+}
+
+*:focus {
+  outline: none;
+}
+
+.button {
+  width: 100%;
+  height: 48px;
+  border-radius: 0;
+  border: 0;
+  background-color: rgba(118, 255, 3, 0.3);
+}
+
+.button:active {
+  background-color: #76ff03;
+}
+
+.button-caption {
+  padding: 8px;
+}
+
+.page-footer {
+  background-color: #3caed2;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 32px;
+  text-align: center;
+}
+
+.page-footer-text {
+  color: #fff;
+  margin-bottom: 0;
+  margin-top: 8px;
+  display: block;
+  text-shadow: 1px 1px 0 rgba(150, 150, 150, 0.78);
+}
+

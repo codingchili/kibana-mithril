@@ -1,0 +1,27 @@
+{
+  "ldap": {
+    "url": "ldap://192.168.1.67:10389",
+    "admin": {
+      "dn": "uid=admin,ou=system",
+      "password": "secret"
+    },
+    "search": {
+      "scope": "sub",
+      "dn": "ou=users,ou=system"
+    }
+  },
+  "login": {
+    "cookie": {
+      "ttl": 1209600,
+      "encoding": "none",
+      "isSecure": true,
+      "isHttpOnly": true,
+      "clearInvalid": true,
+      "strictHeader": true
+    },
+    "secret": "< insert secret here >"
+  },
+  "two-factor": {
+    "length": 16
+  }
+}

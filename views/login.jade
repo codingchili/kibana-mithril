@@ -1,0 +1,34 @@
+doctype html
+html(lang="EN")
+  head
+    title Authorization Required
+    style
+      include style/style.css
+  body
+    div.page-header
+      h2.header-text Kibana
+
+    div.login-box
+      div#header.login-box-header
+        span#header-text.login-box-header-text AUTHENTICATION
+
+      div#form-twofactor
+        div#svg-secret
+        span.secret-label#text-secret [replace this]
+        label.input-label Key
+        input(type="test", onkeypress="keydown(event);" autofocus)#token.input
+
+      div#form-login
+        label.input-label Username
+        input(type="text", onkeypress='keydown(event);' autofocus)#username.input
+        label.input-label Password
+        input(type="password", onkeypress='keydown(event);')#password.input
+
+      div
+        input(type="button", value="LOGIN", onclick='submit();')#submit.button
+
+    div.page-footer
+        h4.page-footer-text &copy;2016
+    script
+      include script/jquery-2.2.3.min.js
+      include script/login.js
