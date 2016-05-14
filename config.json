@@ -15,7 +15,7 @@
     "cookie": {
       "ttl": 1209600,
       "encoding": "none",
-      "isSecure": true,
+      "isSecure": false,
       "isHttpOnly": true,
       "clearInvalid": true,
       "strictHeader": true

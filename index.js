@@ -22,9 +22,19 @@ const Config = require('./lib/config').load('login');
 const SECRET = Config.secret;
 const cookieOptions = Config.cookie;
 
-module.exports = function (kibana) {
+export default function (kibana) {
 
   return new kibana.Plugin({
+
+    uiExports: {
+      app: {
+        title: 'Authentication',
+        description: 'Authentication management plugin',
+        main: 'plugins/kbn-authentication-plugin/app',
+        icon: 'plugins/kbn-authentication-plugin/icon.png'
+      }
+    },
+
     init(server, options) {
 
       Filter.register(server);
@@ -62,7 +72,7 @@ module.exports = function (kibana) {
 
         handler(request, reply) {
           reply(Jade.renderFile(
-            Path.resolve(__dirname, 'views/login.jade'), {
+            Path.resolve(__dirname, 'public/login.jade'), {
               "kbnVersion": Config['kbnVersion']
             }));
         }
