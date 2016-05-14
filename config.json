@@ -1,6 +1,6 @@
 {
   "ldap": {
-    "url": "ldap://localhost:10388",
+    "url": "ldap://localhost:10389",
     "admin": {
       "dn": "uid=admin,ou=system",
       "password": "secret"
@@ -11,6 +11,7 @@
     }
   },
   "login": {
+    "kbnVersion": "5.0.0-snapshot",
     "cookie": {
       "ttl": 1209600,
       "encoding": "none",

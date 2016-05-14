@@ -17,7 +17,7 @@ const application = {
     $.ajax({
       type: 'POST',
       url: '/login',
-      headers: {"kbn-version": "5.0.0-snapshot"},
+      headers: {"kbn-version": window.kbnVersion},
       data: JSON.stringify(
         {
           username: view.username.val(),

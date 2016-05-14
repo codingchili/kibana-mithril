@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Prevents unauthorized access to kbn dashboards.",
   "dependencies": {
+    "hapi": "^13.4.0",
     "hapi-auth-basic": "^4.1.0",
     "hapi-auth-jwt2": "^6.0.0",
     "jsonwebtoken": "^6.2.0",

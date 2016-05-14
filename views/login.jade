@@ -4,9 +4,11 @@ html(lang="EN")
     title Authorization Required
     style
       include style/style.css
+    script.
+      var kbnVersion = "#{kbnVersion}";
   body
     div.page-header
-      h2.header-text Kibana
+      h2.header-text Kibana #{kbnVersion}
 
     div.login-box
       div#header.login-box-header

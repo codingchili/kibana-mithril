@@ -59,8 +59,12 @@ module.exports = function (kibana) {
         method: 'GET',
         path: '/login',
         config: {auth: false},
+
         handler(request, reply) {
-          reply(Jade.renderFile(Path.resolve(__dirname, 'views/login.jade')));
+          reply(Jade.renderFile(
+            Path.resolve(__dirname, 'views/login.jade'), {
+              "kbnVersion": Config['kbnVersion']
+            }));
         }
       });
 
