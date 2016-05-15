@@ -1,28 +1,22 @@
 /**
  * @author Robin Duda
  *
- * Kibana 5.0.0-alpha LDAP authentication plugin.
+ * Kibana 5.0.0-alpha LDAP authentication plugin for multi-user mode.
  *
  * Requires all routes to carry a valid JWT token as a cookie
- * or be redirected. Target of redirection is the login page
- * added to the server API of Kibana. Server API requests are
- * routed through a validation method, which verifies that the
- * token grants query access to the index within the query.
+ * or be redirected to a login page. A filter and proxy is
+ * added to the Kibana Hapi server to ensure query permissions
+ * on indices and to hijack queries for stored dashboards/queries/graphs
+ * so that the request may be processed in a context-aware manner.
  */
 
 const HapiJWT = require('hapi-auth-jwt2');
-const JWT = require('jsonwebtoken');
-const Jade = require('pug');
-const TwoFactor = require('./lib/twofactor');
-const LDAP = require('./lib/ldap');
-const Filter = require('./lib/filter');
-const Path = require('path');
-const Config = require('./lib/config').load('login');
+const Filter = require('./src/filter');
+const API = require('./src/api');
+const Config = require('./src/config').load('login');
 
-const SECRET = Config.secret;
-const cookieOptions = Config.cookie;
 
-export default function (kibana) {
+module.exports = function (kibana) {
 
   return new kibana.Plugin({
 
@@ -30,14 +24,16 @@ export default function (kibana) {
       app: {
         title: 'Authentication',
         description: 'Authentication management plugin',
-        main: 'plugins/kbn-authentication-plugin/app',
-        icon: 'plugins/kbn-authentication-plugin/icon.png'
+        main: 'plugins/kbn-authentication-plugin/script/app',
+        icon: 'plugins/kbn-authentication-plugin/img/icon.png'
       }
     },
 
     init(server, options) {
 
-      Filter.register(server);
+      Filter.proxy(server);
+      Filter.resource(server);
+      API.register(server);
 
       // Login based scheme as a wrapper for JWT scheme.
       server.auth.scheme("login", function (server, options) {
@@ -57,66 +53,16 @@ export default function (kibana) {
       // JWT is used to provide authorization through JWT-cookies.
       server.register(HapiJWT, function (err) {
         server.auth.strategy('jwt', 'jwt', {
-          key: SECRET,
+          key: Config.secret,
           validateFunc: validate,
           verifyOptions: {algorithms: ['HS256']}
         })
       });
 
       server.auth.strategy("login", "login", true);
-
-      server.route({
-        method: 'GET',
-        path: '/login',
-        config: {auth: false},
-
-        handler(request, reply) {
-          reply(Jade.renderFile(
-            Path.resolve(__dirname, 'public/login.jade'), {
-              "kbnVersion": Config['kbnVersion']
-            }));
-        }
-      });
-
-      server.route({
-        method: 'POST',
-        path: '/login',
-        config: {auth: false},
-        handler(request, reply) {
-          var username = request.payload.username;
-          var password = request.payload.password;
-          var nonce = request.payload.nonce;
-
-
-          LDAP.authenticate(username, password, function (err, user) {
-              if (err || !user) {
-                reply().code(401);
-              } else if (TwoFactor.verify(user.dn, nonce)) {
-                reply().state('token', signToken(user.dn), cookieOptions);
-              } else {
-                // If 2FA fails and a previously used shared secret exists,
-                // return with error set. If no previously shared secret exists
-                // or the previosuly shared secret never has been used -> recreate.
-                reply(
-                  (TwoFactor.enabled(user.dn) ? {"error": (nonce)} : TwoFactor.create(user.dn)))
-                  .code(406);
-              }
-            }
-          );
-        }
-      });
     }
   });
 };
-
-function signToken(user) {
-  return JWT.sign(
-    {
-      username: user.name,
-      expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
-    },
-    SECRET);
-}
 
 /**
  * Verifies that the token carried by the request grants access to
@@ -128,8 +74,7 @@ function signToken(user) {
  */
 function validate(token, request, callback) {
   var valid = (new Date().getTime() < token.expiry);
+  var authorized = Filter.access(request, token.username);
 
-  Filter.access(request, token.username);
-
-  callback(null, valid);
+  callback(null, (valid && authorized));
 }

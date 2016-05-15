@@ -6,24 +6,27 @@
 
 
 const Assert = require('assert');
-const LDAP = require('../lib/ldap');
-const LDAPJS = require('ldapjs');
-const Server = LDAPJS.createServer();
+const Authentication = require('../src/authentication');
+const LDAP = require('ldapjs');
+const Server = LDAP.createServer();
 
 const USERNAME = 'username';
 const PASSWORD = 'password';
 const PASSWORD_WRONG = 'pass-wrong';
 
 
-describe('LDAP Implementation', function () {
+describe('LDAP Authentication', function () {
 
   before(function () {
     Server.listen(10388, '0.0.0.0');
 
     Server.bind('uid=admin,ou=system', function (req, res, next) {
-
-      res.end();
-      return next();
+      if (req.credentials === PASSWORD_WRONG) {
+        return next(new LDAP.InvalidCredentialsError());
+      } else {
+        res.end();
+        return next();
+      }
     });
 
     Server.search('ou=users,ou=system', function (req, res, next) {
@@ -36,33 +39,36 @@ describe('LDAP Implementation', function () {
       };
 
       // Returns an entry for all other searches, simulating a missing entry.
-      if (req.filter.json.value === 'missing')
-        res.send({attributes: {}});
-      else
+      if (req.filter.json.value === 'missing') {
+        res.end();
+        return next();
+      } else {
         res.send(entry);
-
-      res.end();
-      return next();
+        res.end();
+        return next();
+      }
     });
   });
 
   it('Should bind successfully with a client.', function (done) {
-    LDAP.authenticate(USERNAME, PASSWORD, function (err, user) {
-      Assert.equal('uid=admin, ou=system', user.dn);
+    Authentication.ldap(USERNAME, PASSWORD, function (err, user) {
+      Assert.equal(user.dn, 'uid=admin, ou=system');
+      Assert.equal(err, null);
       done();
     });
   });
 
   it('Should fail to bind with an user using wrong password.', function (done) {
-    LDAP.authenticate(USERNAME, PASSWORD_WRONG, function (err, user) {
-      Assert.equal(null, user);
+    Authentication.ldap(USERNAME, PASSWORD_WRONG, function (err, user) {
+      Assert.notEqual(err, null);
       done();
     });
-  }); 
+  });
 
   it('Should fail to bind with a user that do not exist.', function (done) {
-    LDAP.authenticate('missing', PASSWORD, function (err, user) {
-      Assert.equal(null, user);
+    Authentication.ldap('missing', PASSWORD, function (err, user) {
+      Assert.equal(user, null);
+      Assert.notEqual(err, null);
       done();
     });
   });

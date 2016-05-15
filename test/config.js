@@ -9,32 +9,32 @@ const Assert = require('assert');
 describe('Configuration reader', function () {
 
   it('Should read and verify the LDAP configuration.', function () {
-    var config = require('../lib/config').load('ldap');
+    var config = require('../src/config').load('ldap');
 
-    Assert.notEqual(null, config, 'Failed to load configuration file.');
-    Assert.notEqual(null, config.url);
-    Assert.notEqual(null, config.admin);
-    Assert.notEqual(null, config.admin.dn);
-    Assert.notEqual(null, config.admin.password);
-    Assert.notEqual(null, config.search);
-    Assert.notEqual(null, config.search.scope);
-    Assert.notEqual(null, config.search.dn);
+    Assert.notEqual(config, 'Failed to load configuration file.');
+    Assert.notEqual(config.url, null);
+    Assert.notEqual(config.admin, null);
+    Assert.notEqual(config.admin.dn, null);
+    Assert.notEqual(config.admin.password, null);
+    Assert.notEqual(config.search, null);
+    Assert.notEqual(config.search.scope, null);
+    Assert.notEqual(config.search.dn, null);
   });
 
   it('Should read and verify the Two Factor configuration.', function () {
-    var config = require('../lib/config').load('two-factor');
+    var config = require('../src/config').load('two-factor');
 
-    Assert.notEqual(null, config, 'Failed to load configuration file.');
-    Assert.notEqual(null, config.length);
+    Assert.notEqual(config, 'Failed to load configuration file.', null);
+    Assert.notEqual(config.length, null);
   });
 
   it('Should read and verify the Login/Cookie configuration.', function () {
-    var config = require('../lib/config').load('login');
+    var config = require('../src/config').load('login');
 
-    Assert.notEqual(null, config, 'Failed to load configuration file.');
-    Assert.notEqual(null, config.cookie);
-    Assert.notEqual(null, config.cookie.ttl);
-    Assert.notEqual(null, config.secret);
+    Assert.notEqual(config, 'Failed to load configuration file.');
+    Assert.notEqual(config.cookie, null);
+    Assert.notEqual(config.cookie.ttl, null);
+    Assert.notEqual(config.secret, null);
   });
 
 });

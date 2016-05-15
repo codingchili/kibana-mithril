@@ -24,5 +24,8 @@
   },
   "two-factor": {
     "length": 16
+  },
+  "mongodb": {
+    "remote": "mongodb://localhost/plugin"
   }
 }

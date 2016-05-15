@@ -5,11 +5,11 @@
  */
 
 const LDAP = require('ldapjs');
-const config = require('./config').load('ldap');
+const Config = require('./config').load('ldap');
 
-const client = LDAP.createClient({url: config.url});
+const client = LDAP.createClient({url: Config.url});
 
-client.bind(config.admin.dn, config.admin.password, function (err) {
+client.bind(Config.admin.dn, Config.admin.password, function (err) {
   if (err)
     throw err;
 });
@@ -24,11 +24,11 @@ module.exports = {
    * @param password to use for authentication.
    * @param callback Function {error, account} called when authentication completes.
    */
-  authenticate: function (username, password, callback) {
+  ldap: function (username, password, callback) {
     const search = {
-      dn: config.search.dn,
+      dn: Config.search.dn,
       options: {
-        scope: config.search.scope,
+        scope: Config.search.scope,
         filter: new LDAP.filters.EqualityFilter({attribute: 'uid', value: username})
       }
     };
@@ -40,15 +40,15 @@ module.exports = {
         found = true;
 
         // Verify credentials by binding to the LDAP server.
-        LDAP.createClient({url: config.url})
+        LDAP.createClient({url: Config.url})
           .bind(entry.dn, password, function (err) {
-              callback(err, entry);
+            callback(err, entry);
           });
       });
 
       result.on('end', function () {
         if (!found) {
-          callback(err);
+          callback(new LDAP.NoSuchObjectError());
         }
       });
     });

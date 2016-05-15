@@ -4,19 +4,20 @@ html(lang="EN")
     title Authorization Required
     style
       include style/style.css
+      include style/login.css
     script.
       var kbnVersion = "#{kbnVersion}";
   body
     div.page-header
       h2.header-text Kibana #{kbnVersion}
 
-    div.login-box
+    div.center-box
       div#header.login-box-header
         span#header-text.login-box-header-text AUTHENTICATION
 
       div#form-twofactor
         div#svg-secret
-        span.secret-label#text-secret [replace this]
+        span.center-label#text-secret [replace this]
         label.input-label Key
         input(type="test", onkeypress="keydown(event);" autofocus)#token.input
 
