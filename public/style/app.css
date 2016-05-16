@@ -4,4 +4,18 @@
   width: 100%;
   text-align: center;
   display: block;
+  margin-top: 32px;
+}
+
+ul {
+  list-style-type: none;
+  font-size: larger;
+  padding-top: 32px;
+}
+
+.title {
+  text-align: center;
+  display: block;
+  margin-top: 32px;
+  font-size: x-large;
 }

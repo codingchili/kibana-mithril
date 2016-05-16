@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "Prevents unauthorized access to kbn dashboards.",
   "dependencies": {
+    "express": "^4.13.4",
+    "express-http-proxy": "^0.6.0",
     "hapi": "^13.4.0",
     "hapi-auth-basic": "^4.1.0",
     "hapi-auth-jwt2": "^6.0.0",
@@ -12,6 +14,7 @@
     "pug": "^2.0.0-alpha7",
     "qr-image": "^3.1.0",
     "request": "^2.72.0",
-    "speakeasy": "^2.0.0"
+    "speakeasy": "^2.0.0",
+    "url": "^0.11.0"
   }
 }

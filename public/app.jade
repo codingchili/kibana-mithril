@@ -2,10 +2,13 @@ style
   include style/style.css
   include style/app.css
 
-div.center-box
-  span.box-text Click the button to log- off. :)
-  form(ng-controller='kbn-authentication-plugin', ng-submit='logout()')
-   input(type="submit", value="LOGOUT").button
+div(ng-controller='kbn-authentication-plugin', data-ng-init='init()').center-box
+  span.title Groups
+  ul
+    li(ng-repeat="name in groups") {{name}}
+  span.box-text Click the button to logout.
+  form(ng-submit='logout()')
+    input(type="submit", value="LOGOUT").button
 
 script
   include script/jquery-2.2.3.min.js

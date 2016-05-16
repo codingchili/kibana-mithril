@@ -1,5 +1,5 @@
 {
-  "ldap": {
+  "authentication": {
     "url": "ldap://localhost:10389",
     "admin": {
       "dn": "uid=admin,ou=system",
@@ -7,10 +7,9 @@
     },
     "search": {
       "scope": "sub",
-      "dn": "ou=users,ou=system"
-    }
-  },
-  "login": {
+      "user-dn": "ou=users,ou=system",
+      "group-dn": "ou=groups,ou=system"
+    },
     "kbnVersion": "5.0.0-snapshot",
     "cookie": {
       "ttl": 1209600,
@@ -27,5 +26,9 @@
   },
   "mongodb": {
     "remote": "mongodb://localhost/plugin"
+  },
+  "proxy": {
+    "port": 8080,
+    "remote": "localhost:5601"
   }
 }

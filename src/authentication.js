@@ -5,7 +5,8 @@
  */
 
 const LDAP = require('ldapjs');
-const Config = require('./config').load('ldap');
+const JWT = require('jsonwebtoken');
+const Config = require('./config').load('authentication');
 
 const client = LDAP.createClient({url: Config.url});
 
@@ -26,7 +27,7 @@ module.exports = {
    */
   ldap: function (username, password, callback) {
     const search = {
-      dn: Config.search.dn,
+      dn: Config.search["user-dn"],
       options: {
         scope: Config.search.scope,
         filter: new LDAP.filters.EqualityFilter({attribute: 'uid', value: username})
@@ -42,7 +43,11 @@ module.exports = {
         // Verify credentials by binding to the LDAP server.
         LDAP.createClient({url: Config.url})
           .bind(entry.dn, password, function (err) {
-            callback(err, entry);
+
+            module.exports.member(entry.object.uid, function (groups) {
+              callback(err, {uid: entry.object.uid, groups: groups});
+            });
+
           });
       });
 
@@ -52,5 +57,70 @@ module.exports = {
         }
       });
     });
+  },
+
+  /**
+   * Retrieve a list of groups an user is member of.
+   *
+   * @param id of the user to look for group membership.
+   * @param callback Function {Boolean}
+   */
+  member: function (id, callback) {
+    const search = {
+      dn: Config.search["group-dn"],
+      options: {
+        scope: Config.search.scope,
+        filter: new LDAP.filters.AndFilter({
+          filters: [
+            new LDAP.filters.EqualityFilter({attribute: 'objectClass', value: 'groupOfNames'}),
+            new LDAP.filters.EqualityFilter({attribute: 'member', value: 'uid=' + id})
+          ]
+        })
+      }
+    };
+
+    client.search(search.dn, search.options, function (err, result) {
+      var member = [];
+
+      result.on('searchEntry', function (entry) {
+        member.push(entry.object.cn);
+      });
+
+      result.on('end', function () {
+        callback(member);
+      });
+    });
+  },
+
+  /**
+   * Signs a JWT token with a configured secret.
+   *
+   * @param uid the unique user id to sign token with.
+   * @param groups the token is authorized for.
+   * @returns {String}
+   */
+  signToken: function (uid, groups) {
+    return JWT.sign(
+      {
+        id: uid,
+        groups: groups,
+        expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
+      },
+      Config.secret);
+  },
+
+  /**
+   * Verifies the validity of a token.
+   * @param token to be verified.
+   * @return Boolean
+   */
+  verifyToken: function (token) {
+    var decoded = JWT.verify(token, Config.secret);
+    var valid = (new Date().getTime() < decoded.expiry);
+
+    if (!decoded || !valid)
+      throw new Error();
+
+    return decoded;
   }
 };
