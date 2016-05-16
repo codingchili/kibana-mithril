@@ -4,10 +4,9 @@
  * Adds the server API to an existing Hapi server object.
  */
 
-const JWT = require('jsonwebtoken');
 const Jade = require('pug');
 const Path = require('path');
-const Config = require('./config').load('login');
+const Config = require('./config').load('authentication');
 const TwoFactor = require('./twofactor');
 const Authentication = require('./authentication');
 
@@ -17,7 +16,7 @@ module.exports = {
    * Adds routing for a Hapi server to implement the 'Server API'.
    *
    * @param server Hapi server to register routes on.
-     */
+   */
   register: function (server) {
 
     server.route({
@@ -43,6 +42,15 @@ module.exports = {
     });
 
     server.route({
+      method: 'GET',
+      path: '/groups',
+
+      handler(request, reply) {
+        reply({groups: request.auth.credentials.groups});
+      }
+    });
+
+    server.route({
       method: 'POST',
       path: '/login',
       config: {auth: false},
@@ -57,14 +65,14 @@ module.exports = {
               reply().code(401);
             } else {
 
-              TwoFactor.verify(user.dn, nonce, function (success, secret) {
+              TwoFactor.verify(user.uid, nonce, function (success, secret) {
 
                 if (success) {
-                  reply().state('token', module.exports.signToken(user.dn), Config.cookie);
+                  reply().state('token', Authentication.signToken(user.uid, user.groups), Config.cookie);
                 } else if (secret.verified === true) {
                   reply({"error": (nonce)}).code(406);
                 } else {
-                  reply(TwoFactor.create(user.dn)).code(406);
+                  reply(TwoFactor.create(user.uid)).code(406);
                 }
               });
 
@@ -73,14 +81,5 @@ module.exports = {
         );
       }
     });
-  },
-
-  signToken: function (id) {
-    return JWT.sign(
-      {
-        id: id,
-        expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
-      },
-      Config.secret);
   }
 };

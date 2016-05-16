@@ -18,6 +18,7 @@ require('ui/routes')
 
 app.controller('kbn-authentication-plugin', function ($scope, $http) {
 
+
   $scope.logout = function () {
 
     $http.post('/logout', {"kbn-version": __KBN__.version}).then(
@@ -30,4 +31,14 @@ app.controller('kbn-authentication-plugin', function ($scope, $http) {
       })
   };
 
+  $scope.init = function () {
+    console.log('init');
+    $http.get('/groups').then(
+      function success(request) {
+        $scope.groups = request.data.groups;
+      },
+      function error() {
+        $scope.groups = '';
+      })
+  }
 });

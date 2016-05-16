@@ -9,6 +9,7 @@ const Hapi = require('hapi');
 const Request = require('request');
 const API = require('../src/api');
 const index = require('../index');
+const Authentication = require('../src/authentication');
 
 const PORT = 5810;
 
@@ -45,15 +46,49 @@ describe('Server API Routing', function () {
       });
   });
 
+  it('Should accept requests with valid authentication token.', function (done) {
+    Request.cookie('');
+
+    Request
+      .post({
+        uri: url('logout'),
+        headers: {
+          Cookie: "token=" + Authentication.signToken('user', ['group1'])
+        }
+      }).on('response', function (response) {
+      Assert.equal(response.statusCode, 200);
+      done();
+    });
+  });
+
+  it('Should redirect with 302 on authentication invalid.', function (done) {
+    Request.cookie('');
+
+    Request
+      .post({
+        uri: url('logout'),
+        headers: {
+          Cookie: "token=invalid"
+        }
+      }).on('response', function (response) {
+      Assert.equal(response.statusCode, 302);
+      done();
+    });
+  });
+
   it('Should redirect with 302 on authentication missing.', function (done) {
     Request.cookie('');
 
     Request
-      .post(url('logout'))
-      .on('response', function (response) {
-        Assert.equal(response.statusCode, 302);
-        done();
-      });
+      .post({
+        uri: url('logout'),
+        headers: {
+          Cookie: ""
+        }
+      }).on('response', function (response) {
+      Assert.equal(response.statusCode, 302);
+      done();
+    });
   });
 
 });

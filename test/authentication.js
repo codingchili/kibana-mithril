@@ -34,7 +34,8 @@ describe('LDAP Authentication', function () {
         dn: 'uid=admin, ou=system',
         attributes: {
           objectclass: ['top', 'organization'],
-          o: ['system']
+          o: ['system'],
+          uid: USERNAME
         }
       };
 
@@ -50,9 +51,25 @@ describe('LDAP Authentication', function () {
     });
   });
 
+
+  Server.search('ou=groups,ou=system', function (req, res, next) {
+    var entry = {
+      dn: 'ou=groups,ou=system',
+      attributes: {
+        objectClass: 'groupOfNames',
+        member: 'uid=' + USERNAME,
+        cn: 'group-name'
+      }
+    };
+
+    res.send(entry);
+    res.end();
+    return next();
+  });
+
   it('Should bind successfully with a client.', function (done) {
     Authentication.ldap(USERNAME, PASSWORD, function (err, user) {
-      Assert.equal(user.dn, 'uid=admin, ou=system');
+      Assert.equal(user.uid, USERNAME);
       Assert.equal(err, null);
       done();
     });
@@ -71,6 +88,32 @@ describe('LDAP Authentication', function () {
       Assert.notEqual(err, null);
       done();
     });
+  });
+
+  it('Should retrieve all the groups an user is member of.', function (done) {
+    Authentication.ldap(USERNAME, PASSWORD, function (err, user) {
+      Assert.equal(user.groups.length, 1);
+      Assert.equal(err, null);
+      done();
+    });
+  });
+
+  it('Should create and verify a valid token', function () {
+    var token = Authentication.signToken('id', ['group']);
+    token = Authentication.verifyToken(token);
+
+    Assert.equal('id', token.id);
+    Assert.equal('group', token.groups[0]);
+  });
+
+  it('Should fail to verify an invalid token', function () {
+    var token = "error";
+
+    try {
+      Authentication.verifyToken(token);
+      Assert.equal(true, false, 'Error expected.');
+    } catch (err) {
+    }
   });
 
 });

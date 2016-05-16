@@ -13,7 +13,8 @@
 const HapiJWT = require('hapi-auth-jwt2');
 const Filter = require('./src/filter');
 const API = require('./src/api');
-const Config = require('./src/config').load('login');
+const Config = require('./src/config').load('authentication');
+const Authentication = require('./src/authentication');
 
 
 module.exports = function (kibana) {
@@ -31,8 +32,7 @@ module.exports = function (kibana) {
 
     init(server, options) {
 
-      Filter.proxy(server);
-      Filter.resource(server);
+      Filter.proxy();
       API.register(server);
 
       // Login based scheme as a wrapper for JWT scheme.
@@ -73,8 +73,5 @@ module.exports = function (kibana) {
  * @param callback {error, success}
  */
 function validate(token, request, callback) {
-  var valid = (new Date().getTime() < token.expiry);
-  var authorized = Filter.access(request, token.username);
-
-  callback(null, (valid && authorized));
+  callback(null, (new Date().getTime() < token.expiry));
 }
