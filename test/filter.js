@@ -15,14 +15,16 @@ describe('Filter - Route proxying and resource filtering', function () {
   });
 
   it('Should accept any searches that do not specify index.', function () {
+    var token = Authentication.signToken('uid', []);
+    var payload = new Buffer('{}\n{}');
     var request = Filter.handleSearch({
-      bodyContent: new Buffer("{}\n{}"),
+      bodyContent: payload,
       headers: {
-        cookie: ""
+        cookie: 'token=' + token
       }
     });
 
-    Assert.equal(new Buffer('{}').toString(), request.bodyContent.toString());
+    Assert.equal(request.bodyContent.toString(), payload.toString());
   });
 
   it('Should return empty request when token is invalid.', function () {
@@ -34,7 +36,7 @@ describe('Filter - Route proxying and resource filtering', function () {
       }
     });
 
-    Assert.equal(new Buffer('{}').toString(), request.bodyContent.toString());
+    Assert.equal(request.bodyContent.toString(), '{}');
   });
 
   it('Should return request when token is valid for given index', function () {
@@ -47,7 +49,7 @@ describe('Filter - Route proxying and resource filtering', function () {
       }
     });
 
-    Assert.equal(payload.toString() + '\n', request.bodyContent.toString());
+    Assert.equal(request.bodyContent.toString(), payload.toString());
   });
 
 });

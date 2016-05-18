@@ -11,9 +11,18 @@
 const Speakeasy = require('speakeasy');
 const QR = require('qr-image');
 const Config = require('./config').load('two-factor');
-const User = require('./model/users');
+var User = require('./model/users');
 
 module.exports = {
+
+  /**
+   * Override the default data store.
+   * 
+   * @param store implements model/users.js
+     */
+  init: function (store) {
+    this.User = store;
+  },
 
   /**
    * Verifies a 2-FA key with the current timeframe and

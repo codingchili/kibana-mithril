@@ -7,83 +7,31 @@
 
 const Assert = require('assert');
 const Authentication = require('../src/authentication');
-const LDAP = require('ldapjs');
-const Server = LDAP.createServer();
-
-const USERNAME = 'username';
-const PASSWORD = 'password';
-const PASSWORD_WRONG = 'pass-wrong';
-
+const Mock = require('./mock/LDAP');
 
 describe('LDAP Authentication', function () {
 
-  before(function () {
-    Server.listen(10388, '0.0.0.0');
-
-    Server.bind('uid=admin,ou=system', function (req, res, next) {
-      if (req.credentials === PASSWORD_WRONG) {
-        return next(new LDAP.InvalidCredentialsError());
-      } else {
-        res.end();
-        return next();
-      }
-    });
-
-    Server.search('ou=users,ou=system', function (req, res, next) {
-      var entry = {
-        dn: 'uid=admin, ou=system',
-        attributes: {
-          objectclass: ['top', 'organization'],
-          o: ['system'],
-          uid: USERNAME
-        }
-      };
-
-      // Returns an entry for all other searches, simulating a missing entry.
-      if (req.filter.json.value === 'missing') {
-        res.end();
-        return next();
-      } else {
-        res.send(entry);
-        res.end();
-        return next();
-      }
-    });
-  });
-
-
-  Server.search('ou=groups,ou=system', function (req, res, next) {
-    var entry = {
-      dn: 'ou=groups,ou=system',
-      attributes: {
-        objectClass: 'groupOfNames',
-        member: 'uid=' + USERNAME,
-        cn: 'group-name'
-      }
-    };
-
-    res.send(entry);
-    res.end();
-    return next();
-  });
+  before((function () {
+    Mock.init();
+  }));
 
   it('Should bind successfully with a client.', function (done) {
-    Authentication.ldap(USERNAME, PASSWORD, function (err, user) {
-      Assert.equal(user.uid, USERNAME);
+    Authentication.ldap(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
+      Assert.equal(user.uid, Mock.USERNAME);
       Assert.equal(err, null);
       done();
     });
   });
 
   it('Should fail to bind with an user using wrong password.', function (done) {
-    Authentication.ldap(USERNAME, PASSWORD_WRONG, function (err, user) {
+    Authentication.ldap(Mock.USERNAME, Mock.PASSWORD_WRONG, function (err, user) {
       Assert.notEqual(err, null);
       done();
     });
   });
 
   it('Should fail to bind with a user that do not exist.', function (done) {
-    Authentication.ldap('missing', PASSWORD, function (err, user) {
+    Authentication.ldap('missing', Mock.PASSWORD, function (err, user) {
       Assert.equal(user, null);
       Assert.notEqual(err, null);
       done();
@@ -91,7 +39,7 @@ describe('LDAP Authentication', function () {
   });
 
   it('Should retrieve all the groups an user is member of.', function (done) {
-    Authentication.ldap(USERNAME, PASSWORD, function (err, user) {
+    Authentication.ldap(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
       Assert.equal(user.groups.length, 1);
       Assert.equal(err, null);
       done();
