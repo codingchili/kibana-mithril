@@ -53,7 +53,7 @@ module.exports = {
    *
    * @param req the request to be inspected contains user groups and requested index.
    * @returns {*}
-     */
+   */
   handleSearch: function (req) {
     var query = getQueryList(req.bodyContent);
     var response = '';
@@ -64,19 +64,20 @@ module.exports = {
       for (var i = 0; i < query.length; i++) {
         var search = JSON.parse(query[i]);
 
-        if (search.index) {
-          if (!module.exports.authorizedIndex(search.index, token.groups)) {
-            authorized = false;
-          }
-        }
-        response += JSON.stringify(search) + '\n';
+        if (search.index && !authorizedIndex(search.index, token.groups))
+          authorized = false;
+
+        response += JSON.stringify(search);
+
+        if (i != query.length - 1)
+          response += '\n';
       }
     } catch (err) {
       authorized = false;
     }
 
     if (authorized) {
-      req.bodyContent = new Buffer(response, 'utf8')
+      req.bodyContent = new Buffer(response);
     } else {
       req.bodyContent = new Buffer('{}');
     }
@@ -90,24 +91,9 @@ module.exports = {
    * @param index the name of the index.
    * @param groups an array of groups to look in.
    * @returns {boolean}
-     */
+   */
   authorizedIndex: function (index, groups) {
-    var authorized = true;
-    index = (index instanceof Array) ? index : [index];
-
-    for (var i = 0; i < index.length; i++) {
-      var member = false;
-
-      for (var k = 0; k < groups.length; k++) {
-        if (index[i] === groups[k])
-          member = true;
-      }
-
-      if (!member)
-        authorized = false;
-    }
-
-    return authorized;
+    return authorizedIndex(index, groups);
   }
 };
 
@@ -124,7 +110,25 @@ function getQueryList(content) {
   if (list.length === 0)
     return [content.toString()];
   else {
-    list.splice(-1, 1);
     return list;
   }
+}
+
+function authorizedIndex(index, groups) {
+  var authorized = true;
+  index = (index instanceof Array) ? index : [index];
+
+  for (var i = 0; i < index.length; i++) {
+    var member = false;
+
+    for (var k = 0; k < groups.length; k++) {
+      if (index[i] === groups[k])
+        member = true;
+    }
+
+    if (!member)
+      authorized = false;
+  }
+
+  return authorized;
 }

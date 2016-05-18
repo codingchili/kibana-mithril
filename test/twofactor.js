@@ -11,6 +11,10 @@ const USERNAME = 'test-username';
 
 describe('Two-factor authentication', function () {
 
+  before((function () {
+    TwoFactor.init(require('./mock/mongodb'));
+  }));
+
   it('Should generate a qr-svg image.', function () {
     var svg = TwoFactor.create(USERNAME).svg;
     Assert.equal(svg.startsWith('<svg'), true);

@@ -32,7 +32,6 @@ app.controller('kbn-authentication-plugin', function ($scope, $http) {
   };
 
   $scope.init = function () {
-    console.log('init');
     $http.get('/groups').then(
       function success(request) {
         $scope.groups = request.data.groups;
