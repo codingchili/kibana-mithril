@@ -9,6 +9,7 @@ const Hapi = require('hapi');
 const Request = require('request');
 const API = require('../src/api');
 const index = require('../index');
+require('./mock/ldap');
 const Authentication = require('../src/authentication');
 
 const PORT = 5810;
