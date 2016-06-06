@@ -4,4 +4,4 @@ node_js:
   - "6.1.0"
 
 before_script:
-  - make build
+  - make test
