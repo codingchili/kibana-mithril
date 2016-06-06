@@ -3,5 +3,9 @@ language: node_js
 node_js:
   - "6.1.0"
 
-before_script:
-  - make test
+install:
+  -npm install -g mocha
+  -npm install
+
+script:
+  - mocha test/
