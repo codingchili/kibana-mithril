@@ -1,6 +1,6 @@
 {
   "authentication": {
-    "url": "ldap://localhost:10388",
+    "url": "ldap://127.0.0.1:10388",
     "admin": {
       "dn": "uid=admin,ou=system",
       "password": "secret"

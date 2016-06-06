@@ -14,7 +14,7 @@ const Authentication = require('../src/authentication');
 const PORT = 5810;
 
 function url(resource) {
-  return 'http://localhost:' + PORT + '/' + resource;
+  return 'http://127.0.0.1:' + PORT + '/' + resource;
 }
 
 describe('Server API Routing', function () {
