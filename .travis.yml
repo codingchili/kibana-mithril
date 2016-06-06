@@ -4,8 +4,8 @@ node_js:
   - "6.1.0"
 
 install:
-  npm install
-  npm install mocha -g
+  - npm install
+  - npm install mocha -g
 
 script:
   - mocha test/
