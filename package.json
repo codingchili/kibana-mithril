@@ -16,5 +16,12 @@
     "request": "^2.72.0",
     "speakeasy": "^2.0.0",
     "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  },
+  "scripts": {
+    "build": "make build",
+    "test": "node ./src/typescript/bin/tsc.js -m commonjs -t ES5 test/*.ts && ./node_modules/mocha/bin/mocha"
   }
 }
