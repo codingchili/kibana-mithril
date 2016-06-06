@@ -7,7 +7,7 @@
 
 const Assert = require('assert');
 const Authentication = require('../src/authentication');
-const Mock = require('./mock/LDAP');
+const Mock = require('./mock/ldap');
 
 describe('LDAP Authentication', function () {
 
