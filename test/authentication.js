@@ -9,7 +9,7 @@ const Assert = require('assert');
 const Mock = require('./mock/ldap');
 const Authentication = require('../src/authentication');
 
-describe.skip('LDAP Authentication', function () {
+describe('LDAP Authentication', function () {
 
   before((function () {
     Mock.init();
