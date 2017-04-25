@@ -7,6 +7,7 @@ git clone https://github.com/codingchili/kbn-authentication-plugin
 cd kbn-authentication-plugin
 mocha test/
 ```
+Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
 
 If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance. The authentication plugin is tested working with Kibana version 5.0.0-alpha1.
 
