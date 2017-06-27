@@ -10,7 +10,7 @@
       "user-dn": "ou=users,ou=system",
       "group-dn": "ou=groups,ou=system"
     },
-    "kbnVersion": "5.0.0-snapshot",
+    "kbnVersion": "5.4.2",
     "cookie": {
       "ttl": 1209600,
       "encoding": "none",
@@ -22,6 +22,7 @@
     "secret": "< insert secret here >"
   },
   "two-factor": {
+    "enabled": false,
     "length": 16
   },
   "mongodb": {
