@@ -1,11 +1,13 @@
 /**
  * @author Robin Duda
  *
- * Authenticates user+password combinations against an LDAP server.
+ * Authenticates users against an user store and a two-factor key storage.
  */
 
 const JWT = require('jsonwebtoken');
-const Config = require('../config').load('authentication');
+const Config = require('../config').get();
+const Storage = require('./' + Config.storage);
+const TwoFactor = require('./twofactor');
 
 module.exports = {
 
@@ -17,19 +19,7 @@ module.exports = {
      * @param password to use for authentication.
      * @param callback Function {error, account} called when authentication completes.
      */
-    authenticate: function (username, password, callback) {
-        // todo call implementation
-    },
-
-    /**
-     * Retrieve a list of groups an user is member of.
-     *
-     * @param id of the user to look for group membership.
-     * @param callback Function {Boolean}
-     */
-    member: function (id, callback) {
-        // todo call implementation
-    },
+    authenticate: Storage.authenticate,
 
     /**
      * Creates a new user in the database, if it already exists it is updated.
@@ -37,9 +27,7 @@ module.exports = {
      * @param username specifies the user to be updated.
      * @param secret updates the user with a new 2-FA secret.
      */
-    create: function (username, secret) {
-        // todo call implementation
-    },
+    create: Storage.create,
 
     /**
      * Returns the 2-FA secret of an user.
@@ -47,9 +35,7 @@ module.exports = {
      * @param username specifies the user which the secret is retrieved from.
      * @param callback Function {verified, secret}
      */
-    getSecret: function (username, callback) {
-        // todo call implementation
-    },
+    getSecret: Storage.getSecret,
 
     /**
      * Sets the verification status of an users 2-Factor authentication secret.
@@ -57,18 +43,7 @@ module.exports = {
      * @param username specifies the user to be updated.
      * @param verified indicates whether the secret is acknowledged or not.
      */
-    setVerified: function (username, verified) {
-        // todo call implementation
-    },
-
-    /**
-     * Removes an user from the database.
-     *
-     * @param username specifies the user to remove.
-     */
-    remove: function (username) {
-        // todo call implementation
-    },
+    setVerified: Storage.setVerified,
 
   /**
    * Signs a JWT token with a configured secret.

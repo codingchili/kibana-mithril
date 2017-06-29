@@ -17,9 +17,12 @@ module.exports = {
    * Returns the configuration for a given section.
    *
    * @param name the section to be returned from the config file..
-     */
-  load: function (name) {
-    return config[name];
-  }
+   */
+  load: name => return config[name];,
+
+  /**
+   * @return the configuration object.
+   */
+  get: () => return config;
 
 };
