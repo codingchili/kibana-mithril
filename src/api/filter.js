@@ -9,10 +9,10 @@
 const Querystring = require('querystring');
 const Express = require('express');
 const Proxy = require('express-http-proxy');
-const Authentication = require('./authentication');
-const Config = require('./config').load('proxy');
+const Authentication = require('../authentication/auth');
+const Config = require('../config').load('proxy');
 
-var app = Express();
+let app = Express();
 
 module.exports = {
 
@@ -25,11 +25,11 @@ module.exports = {
 
     app.use('/', Proxy(Config.remote, {
 
-      filter: function (req, res) {
+      filter: (req, res) => {
         return true;
       },
 
-      decorateRequest: function (req) {
+      decorateRequest: req => {
 
         if (req.path.startsWith('/elasticsearch/_msearch')) {
           return module.exports.handleSearch(req);
@@ -38,7 +38,7 @@ module.exports = {
         }
       },
 
-      forwardPath: function (req) {
+      forwardPath: req => {
         return require('url').parse(req.url).path;
       }
 
@@ -55,21 +55,22 @@ module.exports = {
    * @returns {*}
    */
   handleSearch: function (req) {
-    var query = getQueryList(req.bodyContent);
-    var response = '';
-    var authorized = true;
-    try {
-      var token = Authentication.verifyToken(Querystring.parse(req.headers.cookie).token);
+    const query = getQueryList(req.bodyContent);
+    let response = '';
+    let authorized = true;
 
-      for (var i = 0; i < query.length; i++) {
-        var search = JSON.parse(query[i]);
+    try {
+      const token = Authentication.verifyToken(Querystring.parse(req.headers.cookie).token);
+
+      for (let i = 0; i < query.length; i++) {
+        const search = JSON.parse(query[i]);
 
         if (search.index && !authorizedIndex(search.index, token.groups))
           authorized = false;
 
         response += JSON.stringify(search);
 
-        if (i != query.length - 1)
+        if (i !== query.length - 1)
           response += '\n';
       }
     } catch (err) {
@@ -105,7 +106,7 @@ module.exports = {
  * @returns Array of strings with one item per json object.
  */
 function getQueryList(content) {
-  var list = content.toString().split('\n');
+  const list = content.toString().split('\n');
 
   if (list.length === 0)
     return [content.toString()];
@@ -115,13 +116,13 @@ function getQueryList(content) {
 }
 
 function authorizedIndex(index, groups) {
-  var authorized = true;
+  let authorized = true;
   index = (index instanceof Array) ? index : [index];
 
-  for (var i = 0; i < index.length; i++) {
-    var member = false;
+  for (let i = 0; i < index.length; i++) {
+    let member = false;
 
-    for (var k = 0; k < groups.length; k++) {
+    for (let k = 0; k < groups.length; k++) {
       if (index[i] === groups[k])
         member = true;
     }

@@ -7,7 +7,7 @@
 
 const Assert = require('assert');
 const Mock = require('./mock/ldap');
-const Authentication = require('../src/authentication');
+const Authentication = require('../src/authentication/auth');
 
 describe('LDAP Authentication', function () {
 
@@ -16,7 +16,7 @@ describe('LDAP Authentication', function () {
   }));
 
   it('Should bind successfully with a client.', function (done) {
-    Authentication.ldap(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
+    Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
       Assert.equal(user.uid, Mock.USERNAME);
       Assert.equal(err, null);
       done();
@@ -24,14 +24,14 @@ describe('LDAP Authentication', function () {
   });
 
   it('Should fail to bind with an user using wrong password.', function (done) {
-    Authentication.ldap(Mock.USERNAME, Mock.PASSWORD_WRONG, function (err, user) {
+    Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD_WRONG, function (err, user) {
       Assert.notEqual(err, null);
       done();
     });
   });
 
   it('Should fail to bind with a user that do not exist.', function (done) {
-    Authentication.ldap('missing', Mock.PASSWORD, function (err, user) {
+    Authentication.authenticate('missing', Mock.PASSWORD, function (err, user) {
       Assert.equal(user, null);
       Assert.notEqual(err, null);
       done();
@@ -39,7 +39,7 @@ describe('LDAP Authentication', function () {
   });
 
   it('Should retrieve all the groups an user is member of.', function (done) {
-    Authentication.ldap(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
+    Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
       Assert.equal(user.groups.length, 1);
       Assert.equal(err, null);
       done();

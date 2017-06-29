@@ -1,6 +1,6 @@
 const Assert = require('assert');
-const Filter = require('../src/filter');
-const Authentication = require('../src/authentication');
+const Filter = require('../src/api/filter');
+const Authentication = require('../src/authentication/auth');
 
 describe('Filter - Route proxying and resource filtering', function () {
 

@@ -6,9 +6,9 @@
 
 const Jade = require('pug');
 const Path = require('path');
-const Config = require('./config').load('authentication');
-const TwoFactor = require('./twofactor');
-const Authentication = require('./authentication');
+const Config = require('../config').load('authentication');
+const TwoFactor = require('../authentication/twofactor');
+const Authentication = require('../authentication/auth');
 
 module.exports = {
 
@@ -55,17 +55,17 @@ module.exports = {
       path: '/login',
       config: {auth: false},
       handler(request, reply) {
-        var username = request.payload.username;
-        var password = request.payload.password;
-        var nonce = request.payload.nonce;
+        const username = request.payload.username;
+        const password = request.payload.password;
+        const nonce = request.payload.nonce;
 
-        Authentication.ldap(username, password, function (err, user) {
+        Authentication.authenticate(username, password, (err, user) => {
 
             if (err || !user) {
               reply().code(401);
             } else {
 
-              TwoFactor.verify(user.uid, nonce, function (success, secret) {
+              TwoFactor.verify(user.uid, nonce, (success, secret) => {
 
                 if (success) {
                   reply().state('token', Authentication.signToken(user.uid, user.groups), Config.cookie);

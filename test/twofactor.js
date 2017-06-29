@@ -4,7 +4,7 @@
  * Tests the generation and verification of TOTP tokens.
  */
 
-const TwoFactor = require('../src/twofactor');
+const TwoFactor = require('../src/authentication/twofactor');
 const Assert = require('assert');
 
 const USERNAME = 'test-username';

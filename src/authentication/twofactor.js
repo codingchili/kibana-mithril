@@ -10,8 +10,8 @@
 
 const Speakeasy = require('speakeasy');
 const QR = require('qr-image');
-const Config = require('./config').load('two-factor');
-var User = require('./model/users');
+const Config = require('../config').load('two-factor');
+let User = require('../model/users');
 
 module.exports = {
 
@@ -38,7 +38,7 @@ module.exports = {
       if (!exist) {
         callback(false, secret);
       } else {
-        var success = Speakeasy.totp.verify({
+        let success = Speakeasy.totp.verify({
             secret: secret.key,
             encoding: 'base32',
             token: token
@@ -59,7 +59,7 @@ module.exports = {
    * @returns {{text: *, svg: *}}
      */
   create: function (username) {
-    var key = Speakeasy.generateSecret({length: Config.length});
+    let key = Speakeasy.generateSecret({length: Config.length});
     User.create(username, key.base32);
 
     return {

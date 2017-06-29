@@ -7,10 +7,10 @@
 const Assert = require('assert');
 const Hapi = require('hapi');
 const Request = require('request');
-const API = require('../src/api');
+const API = require('../src/api/api');
 const index = require('../index');
 require('./mock/ldap');
-const Authentication = require('../src/authentication');
+const Authentication = require('../src/authentication/auth');
 
 const PORT = 5810;
 
