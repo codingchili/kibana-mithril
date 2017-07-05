@@ -7,23 +7,32 @@
  * For documentation see users.js
  */
 
-var users = {};
+let users = {};
 
 module.exports = {
 
-  getSecret: function (username, token, callback) {
-    callback(users[username], users[username].secret);
-  },
+    create: function (username, password, callback) {
+        users[username] = {password: password};
+        callback(null);
+    },
 
-  setVerified: function (username, verified) {
-    users[username].verified = verified;
-  },
+    authenticate: function (username, password, callback) {
+        if (users[username].password === password) {
+            callback(null, users[username]);
+        } else {
+            callback({'error': 'failed to authenticate'});
+        }
+    },
 
-  create: function (username, key) {
-    users[username].secret = {key: key, verified: false};
-  },
+    getSecret: function (username, token, callback) {
+        callback(users[username], users[username].secret);
+    },
 
-  remove: function (username) {
-    users[username] = null;
-  }
+    setVerified: function (username, verified) {
+        users[username].verified = verified;
+    },
+
+    remove: function (username) {
+        users[username] = null;
+    }
 };

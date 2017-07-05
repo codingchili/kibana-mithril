@@ -5,14 +5,41 @@
  */
 
 const LDAP = require('ldapjs');
-const Config = require('../config').load('authentication');
-
+const Config = require('../config').load('ldap');
+const File = require('./file');
 const client = LDAP.createClient({url: Config.url});
 
 client.bind(Config.admin.dn, Config.admin.password, err => {
     if (err)
         throw err;
 });
+
+function member(id, callback) {
+    const search = {
+        dn: Config.search["group-dn"],
+        options: {
+            scope: Config.search.scope,
+            filter: new LDAP.filters.AndFilter({
+                filters: [
+                    new LDAP.filters.EqualityFilter({attribute: 'objectClass', value: 'groupOfNames'}),
+                    new LDAP.filters.EqualityFilter({attribute: 'member', value: 'uid=' + id})
+                ]
+            })
+        }
+    };
+
+    client.search(search.dn, search.options, (err, result) => {
+        let member = [];
+
+        result.on('searchEntry', entry => {
+            member.push(entry.object.cn);
+        });
+
+        result.on('end', () => {
+            callback(member);
+        });
+    });
+}
 
 module.exports = {
 
@@ -35,7 +62,7 @@ module.exports = {
                 LDAP.createClient({url: Config.url})
                     .bind(entry.dn, password, err => {
 
-                        module.exports.member(entry.object.uid, groups => {
+                        member(entry.object.uid, groups => {
                             callback(err, {uid: entry.object.uid, groups: groups});
                         });
 
@@ -50,30 +77,11 @@ module.exports = {
         });
     },
 
-    member: function (id, callback) {
-        const search = {
-            dn: Config.search["group-dn"],
-            options: {
-                scope: Config.search.scope,
-                filter: new LDAP.filters.AndFilter({
-                    filters: [
-                        new LDAP.filters.EqualityFilter({attribute: 'objectClass', value: 'groupOfNames'}),
-                        new LDAP.filters.EqualityFilter({attribute: 'member', value: 'uid=' + id})
-                    ]
-                })
-            }
-        };
+    create: function (username, password, callback) {
+        throw new Error('LDAP create user is unsupported.');
+    },
 
-        client.search(search.dn, search.options, (err, result) => {
-            let member = [];
-
-            result.on('searchEntry', entry => {
-                member.push(entry.object.cn);
-            });
-
-            result.on('end', () => {
-                callback(member);
-            });
-        });
-    }
+    // ldap server does not implement 2fa storage, use on-disk.
+    getSecret: File.getSecret,
+    setSecret: File.setSecret,
 };
