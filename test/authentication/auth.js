@@ -10,8 +10,9 @@ const Assert = require('assert');
 const Mock = require('../mock/helper');
 const Authentication = require('../../src/authentication/auth');
 
+
 suite('Tests authentication storage providers.', function () {
-    let implementations = ['file', 'ldap'];
+    let implementations = ['file', 'ldap', 'mongodb'];
 
     implementations.forEach(implementation => {
         describe('Authentication with ' + implementation, function () {

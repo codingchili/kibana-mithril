@@ -4,7 +4,7 @@
  * Provides a connection to a MongoDB instance.
  */
 
-const Mongoose = require('mongoose');
+const Mongoose = require('./goosewrapper').mongoose();
 const MongoConfig = require('../config').load('mongodb');
 const Hash = require('./hash');
 
@@ -41,7 +41,8 @@ module.exports = {
         let user = new User({username: username});
         Hash.password(password, hash => {
             user.password = hash;
-            user.groups = [];
+            user.groups = ['default'];
+            user.uid = username;
             user.save();
             callback(null);
         });
@@ -62,6 +63,3 @@ module.exports = {
         });
     }
 };
-
-module.exports.create('admin', 'admin', () => {
-});
