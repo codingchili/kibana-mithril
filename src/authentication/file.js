@@ -20,10 +20,12 @@ function load() {
     users = JSON.parse(data);
 }
 
-function save() {
+function save(callback) {
     fs.writeFile(Config.filename, JSON.stringify(users), (err) => {
         if (err) {
             throw err;
+        } else {
+            callback();
         }
     });
 }
@@ -53,8 +55,7 @@ module.exports = {
                 password: hash,
                 groups: ['default']
             };
-            save();
-            callback(null);
+            save(() => callback(null));
         });
     },
 
