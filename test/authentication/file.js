@@ -7,7 +7,7 @@ const Config = require('../../src/config').load('file');
 describe('Tests storing/loading user data from disk', function () {
 
     before(function(done) {
-        File.create(Mock.USERNAME, Mock.PASSWORD,  => {
+        File.create(Mock.USERNAME, Mock.PASSWORD, () => {
             done();
         });
     });
