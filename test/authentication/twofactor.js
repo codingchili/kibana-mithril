@@ -65,4 +65,19 @@ describe('Two-factor authentication', function () {
             Assert.equal(success, false);
         });
     });
+
+
+    it('Should not require 2FA when disabled', function (done) {
+
+        TwoFactor.create(USERNAME);
+
+        // disable 2FA
+        require('../../src/config').get()['two-factor'].enabled = false;
+
+        // attempt to verify with a missing nonce
+        TwoFactor.verify(USERNAME, null, (success) => {
+           Assert.ok(success);
+           done();
+        });
+    });
 });
