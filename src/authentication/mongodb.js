@@ -43,13 +43,14 @@ module.exports = {
             user.password = hash;
             user.groups = ['default'];
             user.uid = username;
+            user.secret = {verified: false};
             user.save();
             callback(null);
         });
     },
 
     setSecret: function (username, secret) {
-        let user = {username: username, secret: {key: secret, verified: false}};
+        let user = {username: username, secret: secret};
 
         User.update({username: username}, user, {upsert: true}, err => {
             if (err)

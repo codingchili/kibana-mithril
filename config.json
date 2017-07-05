@@ -1,11 +1,12 @@
 {
   "storage": "file",
   "two-factor": {
-    "enabled": true,
+    "enabled": false,
     "length": 16
   },
   "proxy": {
-    "port": 8080,
+    "enabled": false,
+    "port": 7575,
     "remote": "localhost:5601"
   },
   "authentication": {

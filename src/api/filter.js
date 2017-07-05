@@ -22,29 +22,25 @@ module.exports = {
      * they are routed.
      */
     proxy: function () {
+        if (Config.enabled) {
+            app.use('/', Proxy(Config.remote, {
+                filter: (req, res) => {
+                    return true;
+                },
+                proxyReqBodyDecorator: req => {
 
-        app.use('/', Proxy(Config.remote, {
-
-            filter: (req, res) => {
-                return true;
-            },
-
-            decorateRequest: req => {
-
-                if (req.path.startsWith('/elasticsearch/_msearch')) {
-                    return module.exports.handleSearch(req);
-                } else {
-                    return req;
+                    if (req.path.startsWith('/elasticsearch/_msearch')) {
+                        return module.exports.handleSearch(req);
+                    } else {
+                        return req;
+                    }
+                },
+                forwardPath: req => {
+                    return require('url').parse(req.url).path;
                 }
-            },
-
-            forwardPath: req => {
-                return require('url').parse(req.url).path;
-            }
-
-        }));
-
-        app.listen(Config.port);
+            }));
+            app.listen(Config.port);
+        }
     },
 
     /**

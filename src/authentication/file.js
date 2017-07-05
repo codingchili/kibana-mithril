@@ -15,7 +15,7 @@ function load() {
     try {
         data = fs.readFileSync(Config.filename, {});
     } catch (e) {
-        // no data yet, ignore errors.
+        throw e;
     }
     users = JSON.parse(data);
 }
@@ -53,9 +53,10 @@ module.exports = {
             users[username] = {
                 uid: username,
                 password: hash,
-                groups: ['default']
+                groups: ['default'],
+                secret: {verified: false}
             };
-            save(() => callback(null));
+            save(() => callback());
         });
     },
 
@@ -71,10 +72,7 @@ module.exports = {
         if (!(username in users)) {
             users[username] = {};
         }
-        users[username].secret = {
-            'key': secret,
-            'verified': false
-        };
-        save();
+        users[username].secret = secret;
+        save(() => {});
     }
 };

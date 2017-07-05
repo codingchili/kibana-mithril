@@ -45,7 +45,7 @@ class User {
         users[user.username] = {
             username: user.username,
             password: user.password,
-            secret: (user.secret) ? user.secret : {},
+            secret: (user.secret) ? user.secret : {verified: false},
             groups: (user.groups) ? user.groups : []
         };
     }

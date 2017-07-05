@@ -57,7 +57,7 @@ module.exports = {
      */
     create: function (username) {
         let key = Speakeasy.generateSecret({length: Config.length});
-        Storage.setSecret(username, key.base32);
+        Storage.setSecret(username, {key: key.base32, verified: false});
 
         return {
             text: key.base32,

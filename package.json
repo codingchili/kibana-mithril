@@ -1,11 +1,11 @@
 {
   "name": "kbn-authentication-plugin",
-  "version": "0.1.0",
+  "version": "5.4.2",
   "description": "Prevents unauthorized access to kbn dashboards.",
   "repository": "https://github.com/codingchili/kbn-authentication-plugin",
   "license": "MIT",
   "dependencies": {
-    "argon2": "^0.16.1",
+    "argon2-ffi": "^1.0.1",
     "express": "^4.15.3",
     "express-http-proxy": "^1.0.4",
     "hapi": "^16.4.3",

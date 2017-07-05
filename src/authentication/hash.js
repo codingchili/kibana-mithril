@@ -4,7 +4,9 @@
  * Hashes passwords for long-term storage.
  */
 
-argon2 = require('argon2');
+const argon2 = require('argon2-ffi').argon2i;
+const crypto = require('crypto');
+const options = {timeCost: 4, memoryCost: 1 << 14, parallelism: 2, hashLength: 64};
 
 module.exports = {
 
@@ -15,10 +17,12 @@ module.exports = {
      * @param callback called with the resulting hash.
      */
     password: (plaintext, callback) => {
-        argon2.hash(plaintext).then(hash => {
-            callback(hash);
-        }).catch(err => {
-           throw err;
+        crypto.randomBytes(32, (err, salt) => {
+            argon2.hash(new Buffer(plaintext), salt, options).then(hash => {
+                callback(hash);
+            }).catch(err => {
+                throw err;
+            });
         });
     },
 

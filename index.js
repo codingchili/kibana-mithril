@@ -18,6 +18,7 @@ const Authentication = require('./src/authentication/auth');
 
 
 module.exports = function (kibana) {
+  console.log('WHAT UP');
 
   return new kibana.Plugin({
 
