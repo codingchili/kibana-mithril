@@ -5,6 +5,7 @@
   "repository": "https://github.com/codingchili/kbn-authentication-plugin",
   "license": "MIT",
   "dependencies": {
+    "argon2": "^0.16.1",
     "express": "^4.15.3",
     "express-http-proxy": "^1.0.4",
     "hapi": "^16.4.3",

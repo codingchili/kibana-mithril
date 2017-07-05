@@ -4,6 +4,8 @@
  * Hashes passwords for long-term storage.
  */
 
+argon2 = require('argon2');
+
 module.exports = {
 
     /**
@@ -13,7 +15,11 @@ module.exports = {
      * @param callback called with the resulting hash.
      */
     password: (plaintext, callback) => {
-        callback(plaintext + ".HASHED"); // todo argon2/scrypt
+        argon2.hash(plaintext).then(hash => {
+            callback(hash);
+        }).catch(err => {
+           throw err;
+        });
     },
 
     /**
@@ -26,8 +32,10 @@ module.exports = {
      * @param callback true if equal
      */
     verify: (hash, plaintext, callback) => {
-        module.exports.password(plaintext, result => {
-            callback(result === hash); // todo constant time compare
+        argon2.verify(hash, plaintext).then(match =>
+            callback(match)
+        ).catch(err => {
+            throw err;
         });
     }
 };
