@@ -6,10 +6,15 @@
  */
 
 const fs = require('fs');
+let config;
 
-const config = JSON.parse(
-    fs.readFileSync(
-        require('path').resolve(__dirname, '../config.json'), 'utf-8'));
+function load() {
+    config = JSON.parse(
+        fs.readFileSync(
+            require('path').resolve(__dirname, '../config.json'), 'utf-8'));
+}
+
+load();
 
 module.exports = {
 
@@ -20,6 +25,10 @@ module.exports = {
      */
     load: function (name) {
         return config[name];
+    },
+
+    reload: function() {
+      load();
     },
 
     /**

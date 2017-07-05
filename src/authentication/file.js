@@ -7,7 +7,18 @@
 const Config = require('../config').load('file');
 const Hash = require('./hash');
 const fs = require('fs');
-const users = [];
+let users = [];
+
+
+function load() {
+    let data = '{}';
+    try {
+        data = fs.readFileSync(Config.filename, {});
+    } catch (e) {
+        // no data yet, ignore errors.
+    }
+    users = JSON.parse(data);
+}
 
 function save() {
     fs.writeFile(Config.filename, JSON.stringify(users), (err) => {
@@ -16,6 +27,8 @@ function save() {
         }
     });
 }
+
+load();
 
 module.exports = {
 
@@ -40,8 +53,8 @@ module.exports = {
                 password: hash,
                 groups: ['default']
             };
-            callback(null);
             save();
+            callback(null);
         });
     },
 

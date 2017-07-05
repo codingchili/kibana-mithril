@@ -11,28 +11,17 @@ let users = {};
 
 module.exports = {
 
-    create: function (username, password, callback) {
-        users[username] = {password: password};
-        callback(null);
-    },
+    // implement User here
 
     authenticate: function (username, password, callback) {
-        if (users[username].password === password) {
-            callback(null, users[username]);
-        } else {
-            callback({'error': 'failed to authenticate'});
-        }
     },
 
-    getSecret: function (username, token, callback) {
-        callback(users[username], users[username].secret);
+    create: function (username, password, callback) {
     },
 
-    setVerified: function (username, verified) {
-        users[username].verified = verified;
+    getSecret: function (username, callback) {
     },
 
-    remove: function (username) {
-        users[username] = null;
+    setSecret: function (username, secret) {
     }
 };

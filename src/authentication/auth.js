@@ -14,7 +14,9 @@ module.exports = {
      * Sets the storage implementation to use.
      * @param storage the storage to use.
      */
-    setStorage: storage => Storage = require('./' + storage),
+    setStorage: storage => {
+        Storage = require('./' + storage);
+    },
 
     /**
      * Finds and authenticates user in the directory by its uid
@@ -24,8 +26,9 @@ module.exports = {
      * @param password to use for authentication.
      * @param callback Function {error, account} called when authentication completes.
      */
-    authenticate: Storage.authenticate,
-
+    authenticate: (username, password, callback) => {
+        Storage.authenticate(username, password, callback);
+    },
 
     /**
      * Creates a new user account in the storage if supported.
@@ -34,7 +37,9 @@ module.exports = {
      * @param password of the account to create
      * @param callback Function {error} callen on completion.
      */
-    create: Storage.create,
+    create: (username, password, callback) => {
+        Storage.create(username, password, callback);
+    },
 
     /**
      * Signs a JWT token with a configured secret.

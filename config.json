@@ -1,5 +1,5 @@
 {
-  "storage": "ldap",
+  "storage": "file",
   "two-factor": {
     "enabled": true,
     "length": 16

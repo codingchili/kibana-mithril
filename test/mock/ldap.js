@@ -1,15 +1,19 @@
 const LDAP = require('ldapjs');
 const Server = LDAP.createServer();
 const Mock = require('./helper');
+let init = false;
 
 module.exports = {
 
     init: function () {
-        Server.listen(10388, '0.0.0.0');
+        if (!init) {
+            Server.listen(10388, '0.0.0.0');
+            Server.bind('uid=admin,ou=system', authenticateAdmin);
 
-        Server.bind('uid=admin,ou=system', authenticateAdmin);
-        Server.search('ou=users,ou=system', findUser);
-        Server.search('ou=groups,ou=system', findGroups);
+            Server.search('ou=users,ou=system', findUser);
+            Server.search('ou=groups,ou=system', findGroups);
+        }
+        init = true;
     }
 };
 

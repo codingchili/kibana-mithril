@@ -8,6 +8,10 @@ const Assert = require('assert');
 
 describe('Configuration reader', function () {
 
+    before(() => {
+       require('../src/config').reload();
+    });
+
     it('Should read and verify the LDAP configuration.', function () {
         const config = require('../src/config').load('ldap');
 
