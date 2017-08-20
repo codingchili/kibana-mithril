@@ -3,9 +3,8 @@ Plugin provides authentication through LDAP with 2-factor OTP authentication.
 
 To install on a Kibana dashboard instance, move to kibana/installedPlugins/
 ```
-git clone https://github.com/codingchili/kbn-authentication-plugin
-cd kbn-authentication-plugin
-mocha test/
+git clone https://github.com/codingchili/kbn-authentication-plugin .
+mocha test --recursive -u tdd
 ```
 Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
 
