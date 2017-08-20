@@ -1,7 +1,7 @@
 /**
  * @author Robin Duda
  *
- * Kibana 5.0.0-alpha LDAP authentication plugin for multi-user mode.
+ * Kibana 5.4.2 LDAP authentication plugin for multi-user mode.
  *
  * Requires all routes to carry a valid JWT token as a cookie
  * or be redirected to a login page. A filter and proxy is
@@ -11,13 +11,14 @@
  */
 
 const HapiJWT = require('hapi-auth-jwt2');
-const Filter = require('./src/filter');
-const API = require('./src/api');
+const Filter = require('./src/api/filter');
+const API = require('./src/api/api');
 const Config = require('./src/config').load('authentication');
-const Authentication = require('./src/authentication');
+const Authentication = require('./src/authentication/auth');
 
 
 module.exports = function (kibana) {
+  console.log('WHAT UP');
 
   return new kibana.Plugin({
 

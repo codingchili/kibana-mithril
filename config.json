@@ -1,15 +1,15 @@
 {
+  "storage": "file",
+  "two-factor": {
+    "enabled": true,
+    "length": 16
+  },
+  "proxy": {
+    "enabled": false,
+    "port": 7575,
+    "remote": "localhost:5601"
+  },
   "authentication": {
-    "url": "ldap://127.0.0.1:10388",
-    "admin": {
-      "dn": "uid=admin,ou=system",
-      "password": "secret"
-    },
-    "search": {
-      "scope": "sub",
-      "user-dn": "ou=users,ou=system",
-      "group-dn": "ou=groups,ou=system"
-    },
     "kbnVersion": "5.4.2",
     "cookie": {
       "ttl": 1209600,
@@ -21,15 +21,22 @@
     },
     "secret": "< insert secret here >"
   },
-  "two-factor": {
-    "enabled": false,
-    "length": 16
+  "file": {
+    "filename": "users.json"
+  },
+  "ldap": {
+    "url": "ldap://127.0.0.1:10388",
+    "admin": {
+      "dn": "uid=admin,ou=system",
+      "password": "secret"
+    },
+    "search": {
+      "scope": "sub",
+      "user-dn": "ou=users,ou=system",
+      "group-dn": "ou=groups,ou=system"
+    }
   },
   "mongodb": {
     "remote": "mongodb://localhost/plugin"
-  },
-  "proxy": {
-    "port": 8080,
-    "remote": "localhost:5601"
   }
 }
