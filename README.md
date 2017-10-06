@@ -18,7 +18,7 @@ Perform the following steps to create an installable zip:
 
 ##### Dependencies
 
-- NodeJS 6.*
+- NodeJS 6.9.2+
 - NPM
 - MS Build tools
 - Python 2.7
