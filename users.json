@@ -1,18 +1,1 @@
-{
-  "username": {
-    "uid": "username",
-    "password": "$argon2i$v=19$m=16384,t=4,p=2$/5yD1e87KobRzafvcv3Ijkuvhp43rWHy2++MLLBN02I$aJxfq/ZHWDfYvyl6iAJQosI4CSzuSK2UYj56GDpDgRIKBJi9aPnWskDrdcu1fqdnEt1u0BjP/DW1gbRgQJgT8Q",
-    "groups": [
-      "default"
-    ],
-    "secret": {
-      "verified": false
-    }
-  },
-  "test-username": {
-    "secret": {
-      "key": "EY5GM3DDJI3ESMDMJNRC4KSHHI",
-      "verified": false
-    }
-  }
-}
+{"username":{"uid":"username","password":"$argon2i$v=19$m=16384,t=4,p=2$36gjjn3tLa3wcH/WbHLOX0zfnNewcfgy6vTVvQnizPE$501y7uNomMDNBsYeN47JSpi73wyuxS536u6MXfylAc8qoRdyZWHTWfvEakO1DFQgj8GkrdzTzBCyUPAwEPqtCA","groups":["default"],"secret":{"verified":false}},"test-username":{"secret":{"key":"IVHGIYL5EF3TSRJGJV3UYR3UHE","verified":false}}}
