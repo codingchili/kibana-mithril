@@ -34,6 +34,9 @@ To install the plugin use the kibana-plugin utility, example:
 ```
 ./kibana-plugin install 'file:///C:/users/downloads/kbn-authentication-plugin.zip'
 ```
+
+Default username and password is: 'username' and 'password'.
+
 Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
 
 #### Features
