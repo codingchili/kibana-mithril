@@ -46,7 +46,7 @@ Make sure to set the correct version in json.config. The version must match the 
 - supports storing user credentials and keys in [MongoDB](https://www.mongodb.com/).
 - supports storing user credentials in [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) and keys in a json file.
 - json web token authentication using Kibanas bundled HAPI package.
-- uses the password hashing contest winner of 2017 for password hashing!
+- uses the latest password hashing contest winner!
   - See: [Argon2](https://password-hashing.net/)
 
 ##### Troubleshooting
