@@ -7,13 +7,14 @@
 const Config = require('../config').load('file');
 const Hash = require('./hash');
 const fs = require('fs');
+const filePath = require('path').resolve(__dirname, '../../' + Config.filename);
 let users = [];
 
 
 function load() {
     let data = '{}';
     try {
-        data = fs.readFileSync(Config.filename, {});
+        data = fs.readFileSync(filePath, 'utf-8');
     } catch (e) {
         throw e;
     }
@@ -21,7 +22,7 @@ function load() {
 }
 
 function save(callback) {
-    fs.writeFile(Config.filename, JSON.stringify(users), (err) => {
+    fs.writeFile(filePath, JSON.stringify(users), (err) => {
         if (err) {
             throw err;
         } else {
