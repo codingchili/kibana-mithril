@@ -60,3 +60,8 @@ If you have issues installing the plugin,
 ##### Known issues
 Multi-user capabilities is completed, all authenticated users share the same indice and dashboards.
 No plans on implementing this for now.
+
+- running npm --install with --arch=ia32 breaks mocha but works with Kibana.
+- running npm --install without --arch=ia32 works with mocha but not Kibana.
+
+We are not happy about this.
