@@ -1,12 +1,1 @@
-{
-  "username": {
-    "uid": "username",
-    "password": "$argon2i$v=19$m=16384,t=4,p=2$0jme/aV7Skye1PZIG95v9ADp9A+6wIit4yU5aIRFiYo$Att2hltDz75/IcD6dILaGXgiUWRVk9fFULtVLcTgS3kBimm2HCXEiyRRv54zKLmyU1Rjl/YzU8k7Dmy7Eu18Ig",
-    "groups": [
-      "default"
-    ],
-    "secret": {
-      "verified": false
-    }
-  }
-}
+{"username":{"uid":"username","password":"$argon2i$v=19$m=16384,t=4,p=2$/5yD1e87KobRzafvcv3Ijkuvhp43rWHy2++MLLBN02I$aJxfq/ZHWDfYvyl6iAJQosI4CSzuSK2UYj56GDpDgRIKBJi9aPnWskDrdcu1fqdnEt1u0BjP/DW1gbRgQJgT8Q","groups":["default"],"secret":{"verified":false}},"test-username":{"secret":{"key":"EY5GM3DDJI3ESMDMJNRC4KSHHI","verified":false}}}
