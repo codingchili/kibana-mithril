@@ -20,12 +20,15 @@ Perform the following steps to create an installable zip:
 
 - NodeJS 6.9.2+
 - NPM
-- MS Build tools
+- MS Build tools / Unix build tools
 - Python 2.7
 
 To compile the binary module argon2-ffi build tools are requried, install with
 ```
-npm install --global --production windows-build-tools
+windows: 
+  npm install --global --production windows-build-tools
+unix:    
+  sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 ```
 This installs MS build tools and python 2.7 and is required for node-gyp to work.
 
