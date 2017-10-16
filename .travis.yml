@@ -13,4 +13,4 @@ install:
   - npm install
   - npm install mocha -g
 script:
-  - mocha test --recursive -u tdd
+  - mocha test --recursive -u tdd --exit
