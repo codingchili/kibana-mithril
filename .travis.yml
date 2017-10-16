@@ -1,6 +1,4 @@
 language: node_js
-dist: precise
-sudo: false
 node_js:
   - "6.11.4"
 env:
@@ -14,5 +12,5 @@ addons:
 install:
   - npm install
   - npm install mocha -g
-script:
-  - mocha test --recursive -u tdd
+#script:
+#  - mocha test --recursive -u tdd
