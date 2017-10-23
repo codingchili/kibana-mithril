@@ -10,6 +10,8 @@ cd kbn-authentication-plugin
 npm install --arch=ia32
 mocha test --recursive -u tdd
 ```
+Note: if you are on linux and running kibana using x64 you must omit the --arch flag.
+
 Perform the following steps to create an installable zip:
 1. Set the kibana version in package.json, must match exactly.
 1. move kbn-authentication-plugin into a folder named 'kibana'.
