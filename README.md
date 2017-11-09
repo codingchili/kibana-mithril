@@ -38,7 +38,12 @@ To install the plugin use the kibana-plugin utility, example:
 ./kibana-plugin install 'file:///C:/users/downloads/kbn-authentication-plugin.zip'
 ```
 
-Default username and password is: 'username' and 'password'.
+Default username and password is: 'username' and 'password' for the file storage.
+
+To add a new user run the adduser utility, not supported in LDAP mode.
+```
+node adduser.js USERNAME PASSWORD
+```
 
 Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
 
