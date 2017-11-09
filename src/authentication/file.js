@@ -22,7 +22,7 @@ function load() {
 }
 
 function save(callback) {
-    fs.writeFile(filePath, JSON.stringify(users), (err) => {
+    fs.writeFile(filePath, JSON.stringify(users, null, 4), (err) => {
         if (err) {
             throw err;
         } else {
