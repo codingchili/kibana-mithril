@@ -1,6 +1,7 @@
 # kbn-authentication-plugin [![Build Status](https://travis-ci.org/codingchili/kbn-authentication-plugin.svg?branch=master)](https://travis-ci.org/codingchili/kbn-authentication-plugin)
 A plugin adds authentication to Kibana dashboards!
 
+![key setup](https://raw.githubusercontent.com/codingchili/kbn-authentication-plugin/master/key-setup.png)
 
 #### Building the plugin
 To check out the sources and build the plugin do the following
