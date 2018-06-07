@@ -1,5 +1,5 @@
 # kbn-authentication-plugin [![Build Status](https://travis-ci.org/codingchili/kbn-authentication-plugin.svg?branch=master)](https://travis-ci.org/codingchili/kbn-authentication-plugin)
-A plugin adds authentication to Kibana dashboards!
+A plugin adds authentication to Kibana dashboards! [YouTube demo](https://www.youtube.com/watch?v=vvUdpPQhBjk)
 
 ![key setup](https://raw.githubusercontent.com/codingchili/kbn-authentication-plugin/master/key-setup.png)
 
@@ -8,7 +8,7 @@ To check out the sources and build the plugin do the following
 ```
 git clone https://github.com/codingchili/kbn-authentication-plugin
 cd kbn-authentication-plugin
-npm install --arch=ia32
+npm install
 mocha test --recursive -u tdd
 ```
 Note: if you are on linux and running kibana using x64 you must omit the --arch flag.
@@ -21,7 +21,7 @@ Perform the following steps to create an installable zip:
 
 ##### Dependencies
 
-- NodeJS 6.9.2+
+- NodeJS 8.11.2+
 - NPM
 - MS Build tools / Unix build tools
 - Python 2.7
@@ -69,10 +69,5 @@ If you have issues installing the plugin,
 
 
 ##### Known issues
-Multi-user capabilities is completed, all authenticated users share the same indice and dashboards.
+Multi-user capabilities is not completed, all authenticated users share the same indice and dashboards.
 No plans on implementing this for now.
-
-- running npm --install with --arch=ia32 breaks mocha but works with Kibana.
-- running npm --install without --arch=ia32 works with mocha but not Kibana.
-
-We are not happy about this.
