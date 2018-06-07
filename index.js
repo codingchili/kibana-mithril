@@ -31,6 +31,12 @@ module.exports = function (kibana) {
       }
     },
 
+    config(Joi) {
+      return Joi.object({
+          enabled: Joi.boolean().default(true),
+      }).default()
+    },
+
     init(server, options) {
 
       Filter.proxy();
