@@ -11,7 +11,6 @@ cd kbn-authentication-plugin
 npm install
 mocha test --recursive -u tdd
 ```
-Note: if you are on linux and running kibana using x64 you must omit the --arch flag.
 
 Perform the following steps to create an installable zip:
 1. Set the kibana version in package.json, must match exactly.
@@ -44,6 +43,8 @@ To install the plugin use the kibana-plugin utility, example:
 Default username and password is: 'username' and 'password' for the file storage.
 
 To add a new user run the adduser utility, not supported in LDAP mode.
+
+Make sure kibana x-pack is not enabled, set `xpack.security.enabled: false` in <kibana>/config/kibana.yaml.
 ```
 node adduser.js USERNAME PASSWORD
 ```
@@ -61,13 +62,15 @@ Make sure to set the correct version in json.config. The version must match the 
   - See: [Argon2](https://password-hashing.net/)
 
 ##### Troubleshooting
-If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance. The authentication plugin is tested working with Kibana version 5.6.2.
+If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance. The authentication plugin is tested working with Kibana version 6.3.2.
 
 If you have issues installing the plugin,
 - make sure that the version in package.json is matching your kibana version.
-- make sure to build with --arch=ia32 as kibana ships with a bundled x86 nodejs for windows.
+- make sure that the native modules are compiled with the same arch as kibanas bundled node.
 
 
 ##### Known issues
 Multi-user capabilities is not completed, all authenticated users share the same indice and dashboards.
 No plans on implementing this for now.
+
+A warning appears on startup stating that the N-API is experimental.

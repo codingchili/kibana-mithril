@@ -6,9 +6,9 @@ div(ng-controller='kbn-authentication-plugin', data-ng-init='init()').center-box
   span.title Groups
   ul
     li(ng-repeat="name in groups") {{name}}
-  span.box-text Click the button to logout.
+  span.box-text
   form(ng-submit='logout()')
-    input(type="submit", value="LOGOUT").button
+    input(type='submit', value='LOGOUT').euiButton.euiButton--primary.euiButton--small.button
 
 script
   include script/jquery-2.2.3.min.js

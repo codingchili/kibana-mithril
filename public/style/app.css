@@ -11,6 +11,7 @@ ul {
   list-style-type: none;
   font-size: larger;
   padding-top: 32px;
+  padding-left: 12px;
 }
 
 .title {

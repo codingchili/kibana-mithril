@@ -80,7 +80,7 @@ const view = {
   },
 
   clearError: function () {
-    this.header.css('background-color', '#FFB300');
+    this.header.css('background-color', '#005571');
   },
 
   setError: function (text) {

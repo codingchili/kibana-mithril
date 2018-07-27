@@ -8,7 +8,7 @@ html {
   left: 0;
   right: 0;
   height: 48px;
-  background-color: #3caed2;
+  background-color: #005571;
 }
 
 .header-text {
@@ -22,7 +22,7 @@ html {
 .login-box-header {
   width: 100%;
   height: 32px;
-  background-color: #FFB300;
+  background-color: #005571;
   text-align: center;
   margin-bottom: 16px;
   padding-top: 8px;
@@ -38,7 +38,7 @@ html {
 }
 
 .page-footer {
-  background-color: #3caed2;
+  background-color: #005571;
   position: absolute;
   left: 0;
   bottom: 0;
