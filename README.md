@@ -3,6 +3,34 @@ A plugin adds authentication to Kibana dashboards! [YouTube demo](https://www.yo
 
 ![key setup](https://raw.githubusercontent.com/codingchili/kbn-authentication-plugin/master/key-setup.png)
 
+#### Installing
+To install the plugin use the kibana-plugin utility, example:
+```
+./kibana-plugin install 'https://github.com/codingchili/kbn
+-authentication-plugin/releases/download/1.1.0/kbn-authentication-plugin.zip'
+```
+
+Default username and password is: 'username' and 'password' for the file storage.
+
+To add a new user run the adduser utility, not supported in LDAP mode.
+
+Make sure kibana x-pack is not enabled, set `xpack.security.enabled: false` in <kibana>/config/kibana.yaml.
+```
+node adduser.js USERNAME PASSWORD
+```
+
+Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
+
+#### Features
+- two factor authentication with [time based tokens](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm).
+- supports scanning a barcode in the [Google Authenticator](https://www.google.se/search?q=Google+authenticator) app for example.
+- supports storing user credentials and keys in a simple json file.
+- supports storing user credentials and keys in [MongoDB](https://www.mongodb.com/).
+- supports storing user credentials in [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) and keys in a json file.
+- json web token authentication using Kibanas bundled HAPI package.
+- uses the latest password hashing contest winner!
+  - See: [Argon2](https://password-hashing.net/)
+
 #### Building the plugin
 To check out the sources and build the plugin do the following
 ```
@@ -33,33 +61,6 @@ unix:
   sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 ```
 This installs MS build tools and python 2.7 and is required for node-gyp to work.
-
-#### Installing
-To install the plugin use the kibana-plugin utility, example:
-```
-./kibana-plugin install 'file:///C:/users/downloads/kbn-authentication-plugin.zip'
-```
-
-Default username and password is: 'username' and 'password' for the file storage.
-
-To add a new user run the adduser utility, not supported in LDAP mode.
-
-Make sure kibana x-pack is not enabled, set `xpack.security.enabled: false` in <kibana>/config/kibana.yaml.
-```
-node adduser.js USERNAME PASSWORD
-```
-
-Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
-
-#### Features
-- two factor authentication with [time based tokens](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm).
-- supports scanning a barcode in the [Google Authenticator](https://www.google.se/search?q=Google+authenticator) app for example.
-- supports storing user credentials and keys in a simple json file.
-- supports storing user credentials and keys in [MongoDB](https://www.mongodb.com/).
-- supports storing user credentials in [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) and keys in a json file.
-- json web token authentication using Kibanas bundled HAPI package.
-- uses the latest password hashing contest winner!
-  - See: [Argon2](https://password-hashing.net/)
 
 ##### Troubleshooting
 If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance. The authentication plugin is tested working with Kibana version 6.3.2.
