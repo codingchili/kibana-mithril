@@ -6,8 +6,7 @@ A plugin adds authentication to Kibana dashboards! [YouTube demo](https://www.yo
 #### Installing
 To install the plugin use the kibana-plugin utility, example:
 ```
-./kibana-plugin install 'https://github.com/codingchili/kbn
--authentication-plugin/releases/download/1.1.0/kbn-authentication-plugin.zip'
+./kibana-plugin install 'https://github.com/codingchili/kbn-authentication-plugin/releases/download/1.1.0/kbn-authentication-plugin.zip'
 ```
 
 Default username and password is: 'username' and 'password' for the file storage.
