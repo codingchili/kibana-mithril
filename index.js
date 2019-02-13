@@ -18,58 +18,59 @@ require('./src/authentication/auth');
 
 
 module.exports = function (kibana) {
-  console.log('kibana authentication plugin by codingchili@github init!');
+    console.log('kibana authentication plugin by codingchili@github init!');
 
-  return new kibana.Plugin({
-    name: 'kbn-authentication-plugin',
-    require: [],
-    uiExports: {
-      app: {
-        title: 'Authentication',
-        description: 'Authentication management plugin',
-        main: 'plugins/kbn-authentication-plugin/script/app',
-        icon: 'plugins/kbn-authentication-plugin/img/icon.png'
-      }
-    },
+    return new kibana.Plugin({
+        name: 'kbn-authentication-plugin',
+        require: [],
+        uiExports: {
+            app: {
+                title: 'Authentication',
+                description: 'Authentication management plugin',
+                main: 'plugins/kbn-authentication-plugin/script/app',
+                icon: 'plugins/kbn-authentication-plugin/img/icon.png'
+            }
+        },
 
-    config(Joi) {
-      return Joi.object({
-          enabled: Joi.boolean().default(true),
-      }).default()
-    },
+        config(Joi) {
+            return Joi.object({
+                enabled: Joi.boolean().default(true),
+            }).default()
+        },
 
-    init(server, options) {
+        async init(server, options) {
 
-      Filter.proxy();
-      API.register(server);
+            Filter.proxy();
+            API.register(server);
 
-      // Login based scheme as a wrapper for JWT scheme.
-      server.auth.scheme("login", function (server, options) {
-        return {
-          authenticate: function (request, reply) {
-            server.auth.test("jwt", request, function (err, credentials) {
-              if (err) {
-                reply.redirect("/login")
-              } else {
-                reply.continue({credentials: credentials});
-              }
+            // Login based scheme as a wrapper for JWT scheme.
+            server.auth.scheme("login", function (server, options) {
+                return {
+                    authenticate: async function(request, reply) {
+                        try {
+                            let credentials = await server.auth.test("jwt", request);
+                            reply.continue({credentials: credentials});
+                        } catch (e) {
+                            reply.redirect("/login")
+                        }
+                    }
+                }
             });
-          }
+
+            // JWT is used to provide authorization through JWT-cookies.
+            try {
+                await server.register(HapiJWT,
+                    server.auth.strategy('jwt', 'login', {
+                        key: Config.secret,
+                        validateFunc: validate,
+                        verifyOptions: {algorithms: ['HS256']}
+                    }));
+                server.auth.default("jwt");
+            } catch (err) {
+                console.log(err);
+            }
         }
-      });
-
-      // JWT is used to provide authorization through JWT-cookies.
-      server.register(HapiJWT, function (err) {
-        server.auth.strategy('jwt', 'jwt', {
-          key: Config.secret,
-          validateFunc: validate,
-          verifyOptions: {algorithms: ['HS256']}
-        })
-      });
-
-      server.auth.strategy("login", "login", true);
-    }
-  });
+    });
 };
 
 /**
