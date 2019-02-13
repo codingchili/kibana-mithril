@@ -23,8 +23,9 @@ module.exports = {
             method: 'POST',
             path: '/logout',
 
-            handler(request, reply) {
-                reply().state('token', null);
+            handler(request, h) {
+                h.state('token', null);
+                return h.response().code(200);
             }
         });
 
@@ -33,11 +34,11 @@ module.exports = {
             path: '/login',
             config: {auth: false},
 
-            handler(request, reply) {
-                reply(Jade.renderFile(
+            handler(request, h) {
+                return Jade.renderFile(
                     Path.resolve(__dirname, '../../public/login.jade'), {
                         "kbnVersion": Config['kbnVersion']
-                    }));
+                    });
             }
         });
 
@@ -45,8 +46,8 @@ module.exports = {
             method: 'GET',
             path: '/groups',
 
-            handler(request, reply) {
-                reply({groups: request.auth.credentials.groups});
+            handler(request, h) {
+                return {groups: request.auth.credentials.groups};
             }
         });
 
@@ -54,7 +55,7 @@ module.exports = {
             method: 'POST',
             path: '/login',
             config: {auth: false},
-            handler(request, reply) {
+            handler(request, h) {
                 const username = request.payload.username;
                 const password = request.payload.password;
                 const nonce = request.payload.nonce;
@@ -62,17 +63,17 @@ module.exports = {
                 Authentication.authenticate(username, password, (err, user) => {
 
                         if (err || !user) {
-                            reply().code(401);
+                            return h.response().code(401);
                         } else {
 
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
 
                                 if (success) {
-                                    reply().state('token', Authentication.signToken(user.uid, user.groups), Config.cookie);
+                                    return h.state('token', Authentication.signToken(user.uid, user.groups), Config.cookie).code(200);
                                 } else if (secret.verified === true) {
-                                    reply({"error": (nonce)}).code(406);
+                                    return h.response({"error": (nonce)}).code(406);
                                 } else {
-                                    reply(TwoFactor.create(user.uid)).code(406);
+                                    return h.response(TwoFactor.create(user.uid)).code(406);
                                 }
                             });
 

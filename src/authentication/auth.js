@@ -67,8 +67,9 @@ module.exports = {
         let decoded = JWT.verify(token, Config.authentication.secret);
         let valid = (new Date().getTime() < decoded.expiry);
 
-        if (!decoded || !valid)
+        if (!decoded || !valid) {
             throw new Error();
+        }
 
         return decoded;
     }

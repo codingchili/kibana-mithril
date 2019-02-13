@@ -20,22 +20,16 @@ function url(resource) {
 
 describe('Server API Routing', function () {
 
-    before(function (done) {
+    before(async function () {
         const server = new Hapi.Server({
             host: 'localhost',
             port: PORT
         });
 
-        index({
+        await index({
             Plugin: async function(plugin) {
                 await plugin.init(server, {});
-
-                server.start((err) => {
-                    if (err)
-                        throw err;
-
-                    done();
-                });
+                await server.start();
             }
         });
     });
