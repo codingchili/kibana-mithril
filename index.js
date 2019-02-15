@@ -16,18 +16,18 @@ const Config = require('./src/config').load('authentication');
 require('./src/authentication/auth');
 
 
-module.exports = async function (kibana) {
+export default function (kibana) {
     console.log(`kibana authentication plugin by codingchili@github init!`);
 
-    return await kibana.Plugin({
-        name: 'kbn-authentication-plugin',
+    return new kibana.Plugin({
+        name: 'kibana-mithril',
         require: [],
         uiExports: {
             app: {
                 title: 'Authentication',
                 description: 'Authentication plugin',
-                main: 'plugins/kbn-authentication-plugin/script/app',
-                icon: 'plugins/kbn-authentication-plugin/img/icon.png'
+                main: 'plugins/kibana-mithril/script/app',
+                icon: 'plugins/kibana-mithril/img/icon.png'
             }
         },
 
@@ -37,8 +37,7 @@ module.exports = async function (kibana) {
             }).default()
         },
 
-        async init(server, options) {
-
+        init(server, options) {
             Filter.proxy();
             API.register(server);
 
@@ -59,7 +58,7 @@ module.exports = async function (kibana) {
 
             // JWT is used to provide authorization through JWT-cookies.
             try {
-                await server.register(require('hapi-auth-jwt2'));
+                server.register(require('hapi-auth-jwt2'));
 
                 // needs to be registered so we can reference it from our custom strategy.
                 server.auth.strategy('jwt', 'jwt', {

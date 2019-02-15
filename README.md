@@ -1,12 +1,12 @@
 # kibana-mithril [![Build Status](https://travis-ci.org/codingchili/kibana-mithril.svg?branch=master)](https://travis-ci.org/codingchili/kibana-mithril)
 A plugin adds authentication to Kibana dashboards! [YouTube demo](https://www.youtube.com/watch?v=vvUdpPQhBjk)
 
-![key setup](https://raw.githubusercontent.com/codingchili/kbn-authentication-plugin/master/key-setup.png)
+![key setup](https://raw.githubusercontent.com/codingchili/kibana-mithril/master/key-setup.png)
 
 #### Installing
 To install the plugin use the kibana-plugin utility, example:
 ```
-./kibana-plugin install 'https://github.com/codingchili/kbn-authentication-plugin/releases/download/1.1.0/kbn-authentication-plugin.zip'
+./kibana-plugin install 'https://github.com/codingchili/kibana-mithril/releases/download/1.1.0/kbn-authentication-plugin.zip'
 ```
 
 - Default username and password is: 'username' and 'password' for the file storage.
@@ -32,15 +32,15 @@ Make sure to set the correct version in json.config. The version must match the 
 #### Building the plugin
 To check out the sources and build the plugin do the following
 ```
-git clone https://github.com/codingchili/kbn-authentication-plugin
-cd kbn-authentication-plugin
+git clone https://github.com/codingchili/kibana-mithril
+cd kibana-mithril
 npm install
 mocha test --recursive -u tdd
 ```
 
 Perform the following steps to create an installable zip:
 1. Set the kibana version in package.json, must match exactly.
-1. move kbn-authentication-plugin into a folder named 'kibana'.
+1. move kibana-mithril into a folder named 'kibana'.
 2. Create a zip file that includes the 'kibana' folder.
 4. The plugin can then be installed with the kibana-plugin install command, see installing.
 

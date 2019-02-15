@@ -2,7 +2,7 @@ style
   include style/style.css
   include style/app.css
 
-div(ng-controller='kbn-authentication-plugin', data-ng-init='init()').center-box
+div(ng-controller='kibana-mithril', data-ng-init='init()').center-box
   span.title Groups
   ul
     li(ng-repeat="name in groups") {{name}}

@@ -1,8 +1,8 @@
 {
-  "name": "kbn-authentication-plugin",
-  "version": "7.0.1",
+  "name": "kibana-mithril",
+  "version": "1.2.0",
   "description": "Prevents unauthorized access to kbn dashboards.",
-  "repository": "https://github.com/codingchili/kbn-authentication-plugin",
+  "repository": "https://github.com/codingchili/kibana-mithril",
   "license": "MIT",
   "main": "index.js",
   "kibana": {
