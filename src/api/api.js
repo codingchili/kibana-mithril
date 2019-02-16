@@ -25,7 +25,7 @@ module.exports = {
             path: '/logout',
 
             handler(request, h) {
-                return h.response().unstate(COOKIE_NAME).code(200);
+                return h.response().unstate(COOKIE_NAME, Config.cookie).code(200);
             }
         });
 

@@ -9,7 +9,7 @@
     "version": "7.0.0-alpha1"
   },
   "dependencies": {
-    "argon2-ffi": "^1.1.0",
+    "argon2-ffi": "^1.1.1",
     "express": "^4.16.2",
     "express-http-proxy": "^1.0.7",
     "hapi": "^17.5.3",
@@ -17,8 +17,8 @@
     "hapi-auth-jwt2": "^8.3.0",
     "jsonwebtoken": "^8.1.0",
     "ldapjs": "^1.0.1",
-    "mongoose": "^5.4.11",
-    "pug": "^2.0.0-rc.4",
+    "mongoose": "^5.4.13",
+    "pug": "^2.0.3",
     "qr-image": "^3.2.0",
     "request": "^2.83.0",
     "speakeasy": "^2.0.0",
