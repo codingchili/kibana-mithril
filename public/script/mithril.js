@@ -3,110 +3,114 @@
  *
  * AJAX authentication handler for the authentication view.
  */
-
-
-$(document).ready(function () {
-  view.init();
+document.addEventListener("DOMContentLoaded", () => {
+    view.init();
 });
 
 const application = {
 
-  submit: function () {
+  submit: () => {
     view.loginStart();
 
-    $.ajax({
-      type: 'POST',
-      url: '/mithril',
-      headers: {"kbn-version": window.kbnVersion},
-      data: JSON.stringify(
-        {
-          username: view.username.val(),
-          password: view.password.val(),
-          nonce: view.token.val()
-        }),
-      contentType: 'application/json; charset=utf-8',
-      statusCode: {
-        200: function () {
-          location.href = '/';
-        },
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", '../mithril', true);
+    xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+    xhr.setRequestHeader('kbn-version', window.kbnVersion);
 
-        406: (function (data) {
-          view.showTokenView(JSON.parse(data.responseText));
-        }).bind(this),
+    xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            switch (this.status) {
+                case 200:
+                    location.href = '/';
+                    break;
+                case 406:
+                    view.showTokenView(JSON.parse(this.responseText));
+                    break;
+                case 401:
+                    view.authenticationFailure();
+                    break;
+                default:
+                    console.log("unsupported response code: " + this.status);
+            }
+        }
+    }
 
-        401: (function () {
-          view.authenticationFailure();
-        }).bind(this)
-      }
-    });
+    xhr.send(JSON.stringify({
+           username: view.username.value,
+           password: view.password.value,
+           nonce: view.token.value
+        })
+     );
   }
 };
 
 const view = {
   init: function () {
-    this.header = $('#header');
-    this.headerText = $('#header-text');
-    this.formTwoFactor = $('#form-twofactor');
-    this.svgSecret = $('#svg-secret');
-    this.textSecret = $('#text-secret');
-    this.token = $('#token');
-    this.formLogin = $('#form-login');
-    this.username = $('#username');
-    this.password = $('#password');
-    this.submit = $('#submig');
+    this.header = query('#header');
+    this.headerText = query('#header-text');
+    this.formTwoFactor = query('#form-twofactor');
+    this.svgSecret = query('#svg-secret');
+    this.textSecret = query('#text-secret');
+    this.token = query('#token');
+    this.formLogin = query('#form-login');
+    this.username = query('#username');
+    this.password = query('#password');
+    this.submit = query('#submit');
 
     this.showLogin();
   },
 
   loginStart: function loginStart() {
-    this.submit.val('LOGGING IN...');
+    this.submit.textContent = 'LOGGING IN...';
   },
 
   authenticationFailure: function () {
     this.setError("AUTHENTICATION FAILURE");
-    this.submit.val('LOGIN');
-    this.password.val('');
+    this.submit.textContent = 'LOGIN';
+    this.password.value = '';
     this.showLogin();
     this.password.focus();
   },
 
   showLogin: function () {
-    this.headerText.text('AUTHENTICATION');
-    this.svgSecret.hide();
-    this.textSecret.hide();
-    this.formTwoFactor.hide();
-    this.formLogin.show();
+    this.headerText.textContent = 'AUTHENTICATION';
+    hide(this.svgSecret);
+    hide(this.textSecret)
+    hide(this.formTwoFactor);
+    show(this.formLogin);
     this.username.focus();
   },
 
   clearError: function () {
-    this.header.css('background-color', '#005571');
+    this.header.style['background-color'] = '#005571';
   },
 
   setError: function (text) {
-    this.headerText.text(text);
-    this.header.css('background-color', 'red');
+    this.headerText.textContent = text;
+    this.header.style['background-color'] = 'red';
   },
 
   showTokenView: function (token) {
-    this.formLogin.hide();
-    this.formTwoFactor.show();
-    this.headerText.text('TWO-FACTOR');
-    this.token.val('');
+    hide(this.formLogin);
+    show(this.formTwoFactor);
+    this.headerText.textContent = 'TWO-FACTOR';
+    this.submit.textContent = 'LOGIN';
+    this.token.value = '';
     this.token.focus();
     this.clearError();
 
-    if (token.error)
+    if (token.error) {
       this.setError('INVALID KEY');
+    }
 
     if (!token.svg || !token.text) {
-      this.svgSecret.hide();
-      this.textSecret.hide();
+      hide(this.svgSecret);
+      hide(this.textSecret);
     } else {
-      this.svgSecret.show();
-      this.textSecret.show();
-      this.svgSecret.html(token.svg);
-      this.textSecret.text(token.text);
+      show(this.svgSecret);
+      show(this.textSecret);
+      this.svgSecret.innerHTML = token.svg;
+      this.textSecret.textContent = token.text;
     }
   }
 };
@@ -118,4 +122,16 @@ function submit() {
 function keydown(e) {
   if (e.keyCode === 13)
     application.submit();
+}
+
+function hide(element) {
+    element.style.display = 'none';
+}
+
+function show(element) {
+    element.style.display = 'block';
+}
+
+function query(selector) {
+    return document.querySelector(selector);
 }
