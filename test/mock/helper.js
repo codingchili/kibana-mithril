@@ -2,6 +2,7 @@ const Hash = require('../../src/authentication/hash');
 const USERNAME = 'username';
 const PASSWORD = 'password';
 const PASSWORD_WRONG = 'pass-wrong';
+
 let users = {
     username: {uid: USERNAME, password: null, groups: ['default'], secret: {}, toJSON: () => {
         return users[USERNAME];

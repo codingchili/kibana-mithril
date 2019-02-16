@@ -18,32 +18,36 @@ function url(resource) {
     return 'http://127.0.0.1:' + PORT + '/' + resource;
 }
 
-describe('Server API Routing', function () {
+describe('Server API Routing', () => {
 
-    before(async function () {
+    before(async () => {
         const server = new Hapi.Server({
             host: 'localhost',
             port: PORT
         });
 
-        await index({
-            Plugin: async function(plugin) {
-                await plugin.init(server, {});
-                await server.start();
+        let plugin = index({
+            Plugin: class {
+                constructor(plugin) {
+                    this.init = plugin.init;
+                }
             }
         });
+
+        await plugin.init(server, {});
+        await server.start();
     });
 
-    it('Should deliver the login page on /login', function (done) {
+    it('Should deliver the login page on /mithril', (done) => {
         Request
-            .get(url('login'))
-            .on('response', function (response) {
+            .get(url('mithril'))
+            .on('response', (response) => {
                 Assert.equal(response.statusCode, 200);
                 done();
             });
     });
 
-    it('Should accept requests with valid authentication token.', function (done) {
+    it('Should accept requests with valid authentication token.', (done) => {
         Request.cookie('');
 
         Request
@@ -52,13 +56,13 @@ describe('Server API Routing', function () {
                 headers: {
                     Cookie: "token=" + Authentication.signToken('user', ['group1'])
                 }
-            }).on('response', function (response) {
+            }).on('response', (response) => {
             Assert.equal(response.statusCode, 200);
             done();
         });
     });
 
-    it('Should redirect with 302 on authentication invalid.', function (done) {
+    it('Should redirect with 302 on authentication invalid.', (done) => {
         Request.cookie('');
 
         Request
@@ -67,13 +71,13 @@ describe('Server API Routing', function () {
                 headers: {
                     Cookie: "token=invalid"
                 }
-            }).on('response', function (response) {
+            }).on('response', (response) => {
             Assert.equal(response.statusCode, 302);
             done();
         });
     });
 
-    it('Should redirect with 302 on authentication missing.', function (done) {
+    it('Should redirect with 302 on authentication missing.', (done) => {
         Request.cookie('');
 
         Request
@@ -82,7 +86,7 @@ describe('Server API Routing', function () {
                 headers: {
                     Cookie: ""
                 }
-            }).on('response', function (response) {
+            }).on('response', (response) => {
             Assert.equal(response.statusCode, 302);
             done();
         });

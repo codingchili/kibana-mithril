@@ -11,11 +11,11 @@ const Mock = require('../mock/helper');
 const Authentication = require('../../src/authentication/auth');
 
 
-suite('Tests authentication storage providers.', function () {
+suite('Tests authentication storage providers.', () => {
     let implementations = ['file', 'ldap', 'mongodb'];
 
     implementations.forEach(implementation => {
-        describe('Authentication with ' + implementation, function () {
+        describe('Authentication with ' + implementation, () => {
 
             before((done) => {
                 Mock.init(() => {
@@ -24,38 +24,38 @@ suite('Tests authentication storage providers.', function () {
                 });
             });
 
-            it('Should bind successfully with a client.', function (done) {
-                Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
+            it('Should bind successfully with a client.', (done) =>{
+                Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD, (err, user) => {
                     Assert.equal(user.uid, Mock.USERNAME);
                     Assert.equal(err, null);
                     done();
                 });
             });
 
-            it('Should fail to bind with an user using wrong password.', function (done) {
-                Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD_WRONG, function (err, user) {
+            it('Should fail to bind with an user using wrong password.', (done) => {
+                Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD_WRONG, (err, user) => {
                     Assert.notEqual(err, null);
                     done();
                 });
             });
 
-            it('Should fail to bind with a user that do not exist.', function (done) {
-                Authentication.authenticate('missing', Mock.PASSWORD, function (err, user) {
+            it('Should fail to bind with a user that do not exist.', (done) => {
+                Authentication.authenticate('missing', Mock.PASSWORD, (err, user) => {
                     Assert.equal(user, null);
                     Assert.notEqual(err, null);
                     done();
                 });
             });
 
-            it('Should retrieve all the groups an user is member of.', function (done) {
-                Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD, function (err, user) {
+            it('Should retrieve all the groups an user is member of.', (done) => {
+                Authentication.authenticate(Mock.USERNAME, Mock.PASSWORD, (err, user) => {
                     Assert.equal(err, null);
                     Assert.equal(user.groups.length, 1);
                     done();
                 });
             });
 
-            it('Should create and verify a valid token', function () {
+            it('Should create and verify a valid token', () => {
                 let token = Authentication.signToken('id', ['group']);
                 token = Authentication.verifyToken(token);
 
@@ -63,7 +63,7 @@ suite('Tests authentication storage providers.', function () {
                 Assert.equal('group', token.groups[0]);
             });
 
-            it('Should fail to verify an invalid token', function () {
+            it('Should fail to verify an invalid token', () => {
                 let token = "error";
 
                 try {
