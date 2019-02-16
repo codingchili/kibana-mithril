@@ -4,24 +4,32 @@
  * Application plugin and Angular controller.
  */
 
-require('ui/autoload/all');
+import angular from 'angular';
+import routes from 'ui/routes';
+import { uiModules } from 'ui/modules';
+
+import 'ui/autoload/styles';
+import template from '../app.html'
+
+import '../style/app.css';
+import '../style/style.css';
 
 document.title = 'Authentication - Kibana';
 
-var app = require('ui/modules').get('apps/kibana-mithril', []);
+var app = uiModules.get('app/kibana-mithril', []);
 
-require('ui/routes').enable();
-require('ui/routes')
-  .when('/:id?', {
-    template: require('plugins/kibana-mithril/app.tmpl')
-  });
+routes.enable();
+routes.when('/', {
+    template: template,
+    reloadOnSearch: false
+});
 
-app.controller('kibana-mithril', function ($scope, $http) {
+app.controller('kibana-mithril', ($scope, $http) => {
 
 
-  $scope.logout = function () {
+  $scope.logout = () => {
 
-    $http.post('/logout', {"kbn-version": __KBN__.version}).then(
+    $http.post('../logout', {}).then(
       function success() {
         window.location = '/';
       },
@@ -31,8 +39,8 @@ app.controller('kibana-mithril', function ($scope, $http) {
       })
   };
 
-  $scope.init = function () {
-    $http.get('/groups').then(
+  $scope.init = () => {
+    $http.get('../groups').then(
       function success(request) {
         $scope.groups = request.data.groups;
       },

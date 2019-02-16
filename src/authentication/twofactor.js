@@ -26,7 +26,7 @@ module.exports = {
      */
     verify: function (username, token, callback) {
         if (Config.enabled) {
-            Storage.getSecret(username, function (exist, secret) {
+            Storage.getSecret(username, (exist, secret) => {
 
                 if (!exist) {
                     callback(false, secret);
@@ -73,7 +73,7 @@ module.exports = {
      * @param callback Function {Boolean}
      */
     enabled: function (username, callback) {
-        Storage.getSecret(username, function (enabled, secret) {
+        Storage.getSecret(username, (enabled, secret) => {
             callback(enabled, secret);
         });
     },

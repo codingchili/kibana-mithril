@@ -6,9 +6,11 @@
 
 const Jade = require('pug');
 const Path = require('path');
-const Config = require('../config').load('ldap');
+const Config = require('../config').load('authentication');
 const TwoFactor = require('../authentication/twofactor');
 const Authentication = require('../authentication/auth');
+
+const COOKIE_NAME = 'token';
 
 module.exports = {
 
@@ -17,15 +19,13 @@ module.exports = {
      *
      * @param server Hapi server to register routes on.
      */
-    register: function (server) {
-
+    register: async function (server) {
         server.route({
             method: 'POST',
             path: '/logout',
 
             handler(request, h) {
-                h.state('token', null);
-                return h.response().code(200);
+                return h.response().unstate(COOKIE_NAME).code(200);
             }
         });
 
@@ -36,7 +36,7 @@ module.exports = {
 
             handler(request, h) {
                 return Jade.renderFile(
-                    Path.resolve(__dirname, '../../public/mithril.tmpl'), {
+                    Path.resolve(__dirname, '../../public/mithril.pug'), {
                         "kbnVersion": Config['kbnVersion']
                     });
             }
@@ -68,12 +68,17 @@ module.exports = {
                         } else {
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
                                 if (success) {
-                                    h.state('token', Authentication.signToken(user.uid, user.groups), Config.cookie);
+                                    // 2FA key verified successfully.
+                                    h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), Config.cookie);
                                     resolve(h.response().code(200));
-                                } else if (secret.verified === true) {
-                                    resolve(h.response({"error": (nonce)}).code(406));
                                 } else {
-                                    resolve(h.response(TwoFactor.create(user.uid)).code(406));
+                                    if (secret.verified === true) {
+                                        // secret already verified return an error.
+                                        resolve(h.response({"error": (nonce)}).code(406));
+                                    } else {
+                                        // secret is not verified - return a new qr/code.
+                                        resolve(h.response(TwoFactor.create(user.uid)).code(406));
+                                    }
                                 }
                             });
                         }
@@ -81,5 +86,55 @@ module.exports = {
                 });
             }
         });
+
+        // Login based scheme as a wrapper for JWT scheme.
+        server.auth.scheme("mithril", (server, options) => {
+            return {
+                authenticate: async (request, h) => {
+                    try {
+                        let credentials = await server.auth.test("jwt", request);
+                        return h.authenticated({credentials: credentials});
+                    } catch (e) {
+                        return h.redirect("/mithril").takeover();
+                    }
+                }
+            }
+        });
+
+        // JWT is used to provide authorization through JWT-cookies.
+        try {
+            await server.register(require('hapi-auth-jwt2'));
+
+            // needs to be registered so we can reference it from our custom strategy.
+            server.auth.strategy('jwt', 'jwt', {
+                key: Config.secret,
+                validate: validate,
+                verifyOptions: {algorithms: ['HS256']}
+            });
+
+            server.auth.strategy("mithril", "mithril", {});
+
+            // hack to override the default strategy that is already set by x-pack.
+            server.auth.settings.default = null;
+
+            server.auth.default("mithril");
+        } catch (err) {
+            throw err;
+        }
+
     }
 };
+
+
+/**
+ * Verifies that the token carried by the request grants access to
+ * the requested page or API/Index resource.
+ *
+ * @param token JWT token carried in a cookie.
+ * @param request To be validated.
+ * @param callback {error, success}
+ */
+function validate(token, h) {
+  let valid = new Date().getTime() < token.expiry;
+  return {isValid: valid};
+}
