@@ -16,7 +16,7 @@ const application = {
 
     $.ajax({
       type: 'POST',
-      url: '/login',
+      url: '/mithril',
       headers: {"kbn-version": window.kbnVersion},
       data: JSON.stringify(
         {

@@ -13,7 +13,7 @@ var app = require('ui/modules').get('apps/kibana-mithril', []);
 require('ui/routes').enable();
 require('ui/routes')
   .when('/:id?', {
-    template: require('plugins/kibana-mithril/app.jade')
+    template: require('plugins/kibana-mithril/app.tmpl')
   });
 
 app.controller('kibana-mithril', function ($scope, $http) {

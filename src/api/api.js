@@ -31,12 +31,12 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/login',
+            path: '/mithril',
             config: {auth: false},
 
             handler(request, h) {
                 return Jade.renderFile(
-                    Path.resolve(__dirname, '../../public/login.jade'), {
+                    Path.resolve(__dirname, '../../public/mithril.tmpl'), {
                         "kbnVersion": Config['kbnVersion']
                     });
             }
@@ -53,33 +53,32 @@ module.exports = {
 
         server.route({
             method: 'POST',
-            path: '/login',
+            path: '/mithril',
             config: {auth: false},
             handler(request, h) {
                 const username = request.payload.username;
                 const password = request.payload.password;
                 const nonce = request.payload.nonce;
 
-                Authentication.authenticate(username, password, (err, user) => {
+                return new Promise((resolve, reject) => {
+                    Authentication.authenticate(username, password, (err, user) => {
 
                         if (err || !user) {
-                            return h.response().code(401);
+                            resolve(h.response().code(401));
                         } else {
-
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
-
                                 if (success) {
-                                    return h.state('token', Authentication.signToken(user.uid, user.groups), Config.cookie).code(200);
+                                    h.state('token', Authentication.signToken(user.uid, user.groups), Config.cookie);
+                                    resolve(h.response().code(200));
                                 } else if (secret.verified === true) {
-                                    return h.response({"error": (nonce)}).code(406);
+                                    resolve(h.response({"error": (nonce)}).code(406));
                                 } else {
-                                    return h.response(TwoFactor.create(user.uid)).code(406);
+                                    resolve(h.response(TwoFactor.create(user.uid)).code(406));
                                 }
                             });
-
                         }
-                    }
-                );
+                    });
+                });
             }
         });
     }

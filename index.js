@@ -16,7 +16,7 @@ const Config = require('./src/config').load('authentication');
 require('./src/authentication/auth');
 
 
-export default function (kibana) {
+module.exports = function (kibana) {
     console.log(`kibana authentication plugin by codingchili@github init!`);
 
     return new kibana.Plugin({
@@ -37,20 +37,20 @@ export default function (kibana) {
             }).default()
         },
 
-        init(server, options) {
+        init: async function(server, options) {
             Filter.proxy();
             API.register(server);
 
 
             // Login based scheme as a wrapper for JWT scheme.
-            server.auth.scheme("login", function (server, options) {
+            server.auth.scheme("mithril", function (server, options) {
                 return {
                     authenticate: async function(request, h) {
                         try {
                             let credentials = await server.auth.test("jwt", request);
                             return h.authenticated({credentials: credentials});
                         } catch (e) {
-                            return h.redirect("/login").takeover();
+                            return h.redirect("/mithril").takeover();
                         }
                     }
                 }
@@ -67,8 +67,12 @@ export default function (kibana) {
                     verifyOptions: {algorithms: ['HS256']}
                 });
 
-                server.auth.strategy("login", "login", {});
-                server.auth.default("login");
+                server.auth.strategy("mithril", "mithril", {});
+
+                // hack to override the default strategy that is already set by x-pack.
+                server.auth.settings.default = null;
+
+                server.auth.default("mithril");
             } catch (err) {
                 throw err;
             }
