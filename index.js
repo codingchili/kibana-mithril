@@ -24,10 +24,11 @@ module.exports = function (kibana) {
         require: [],
         uiExports: {
             app: {
-                title: 'Authentication',
-                description: 'Authentication plugin',
+                title: 'Mithril',
+                description: 'Mithril authentication plugin.',
                 main: 'plugins/kibana-mithril/script/app',
-                icon: 'plugins/kibana-mithril/img/icon.png'
+                euiIconType: 'securityApp',
+                icon: 'plugins/kibana-mithril/img/icon.svg'
             }
         },
 
@@ -39,56 +40,7 @@ module.exports = function (kibana) {
 
         init: async function(server, options) {
             Filter.proxy();
-            API.register(server);
-
-
-            // Login based scheme as a wrapper for JWT scheme.
-            server.auth.scheme("mithril", function (server, options) {
-                return {
-                    authenticate: async function(request, h) {
-                        try {
-                            let credentials = await server.auth.test("jwt", request);
-                            return h.authenticated({credentials: credentials});
-                        } catch (e) {
-                            return h.redirect("/mithril").takeover();
-                        }
-                    }
-                }
-            });
-
-            // JWT is used to provide authorization through JWT-cookies.
-            try {
-                server.register(require('hapi-auth-jwt2'));
-
-                // needs to be registered so we can reference it from our custom strategy.
-                server.auth.strategy('jwt', 'jwt', {
-                    key: Config.secret,
-                    validate: validate,
-                    verifyOptions: {algorithms: ['HS256']}
-                });
-
-                server.auth.strategy("mithril", "mithril", {});
-
-                // hack to override the default strategy that is already set by x-pack.
-                server.auth.settings.default = null;
-
-                server.auth.default("mithril");
-            } catch (err) {
-                throw err;
-            }
+            await API.register(server);
         }
     });
 };
-
-/**
- * Verifies that the token carried by the request grants access to
- * the requested page or API/Index resource.
- *
- * @param token JWT token carried in a cookie.
- * @param request To be validated.
- * @param callback {error, success}
- */
-function validate(token, h) {
-  let valid = new Date().getTime() < token.expiry;
-  return {isValid: valid};
-}
