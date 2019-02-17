@@ -31,24 +31,24 @@ To set where credentials are stored, change 'storage' in config.json. The suppor
 
 Two factor authentication can be disabled by setting 'two-factor.enabled' to false.
 
-Defaults
+**Defaults**
 - Two factor authentication is enabled.
 - The 'file' storage is used to store users.
 - A secret for securing JWT tokens are generated on startup.
 
-*File*
+**File**
 - "filename", indicates which file user credentials are stored in.
 
 This needs to be configured when using LDAP with two-factor authentication since the secret keys cannot be stored in the LDAP directory.
 
-*MongoDB*
+**MongoDB**
 - "url", points to a MongoDB server and collection to use.
 
 When using mongoDB as a credentials store, 2FA secrets are also stored in the database.
 
 Note: does not support servers that requires authentication.
 
-*Ldap*
+**Ldap**
 In `config.js` there is some sample configuration for setting up LDAP connectivity.
 
 - "admin", an user that has privilegies to search for users/groups within the directory.
@@ -78,7 +78,7 @@ npm install
 mocha test --recursive -u tdd
 ```
 
-To build an installable script run the following scripts
+**To build an installable script run the following script**
 ```
 # make sure to match the kibana version
 ./release.sh <kibana-version>
@@ -86,7 +86,7 @@ To build an installable script run the following scripts
 ./release.sh 6.6.0
 ```
 
-*This creates an installable zip in `build/dist/`.*
+**This creates an installable zip in `build/dist/`.**
 
 The script can either be executed on a windows machine with gitbash or WSL or on a linux system.
 jq needs to be installed and available on the path for the script to work.
@@ -111,11 +111,11 @@ This installs MS build tools and python 2.7 and is required for node-gyp to work
 ##### Troubleshooting
 If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance.
 
-Kibana compatibility matrix
+**Kibana compatibility matrix**
 - 1.1.0 is compatible with 5.6.4 -> 6.3.2
 - 1.2.0 is compatible with 6.6.0 -> 7.0.0-beta1
 
-If you have issues installing the plugin,
+**If you have issues installing the plugin**,
 - make sure that the version in package.json is matching your kibana version.
 - make sure that the native modules are compiled with the same arch as kibanas bundled node.
 
@@ -126,8 +126,8 @@ If you have issues installing the plugin,
 - A warning appears on startup stating that the N-API is experimental.
 - Installable zip's needs to be build for each platform windows/linux and each Kibana version.
 
-Maintaining kibana plugins is hard work, the JS world is full of shifting paradigms and backwards
+*Maintaining kibana plugins is hard work, the JS world is full of shifting paradigms and backwards
 compatibility is seldom prioritized. Lack of documentation and quality is a constant nightmare. Due to
 the heavy cost of upgrading there are few resources for adding new features. The upgrade from
-Kibana 6.3.2 to 6.4.X came with a truckload of breaking changes and took a week to finish.
+Kibana 6.3.2 to 6.4.X came with a truckload of breaking changes and took a week to finish.*
 
