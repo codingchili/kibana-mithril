@@ -3,7 +3,7 @@ os:
   - linux
   - windows
 node_js:
-- 8.7.0
+- 10.15.1
 env:
 - CXX=g++-4.8
 addons:
