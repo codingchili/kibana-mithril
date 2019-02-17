@@ -8,8 +8,32 @@
 
 const Assert = require('assert');
 const Mock = require('../mock/helper');
+const Config = require('../../src/config');
 const Authentication = require('../../src/authentication/auth');
 
+describe('Hmac secret generation', () => {
+
+    it('Generates a new secret if unset in configuration', () => {
+        Config.setSecret(null);
+        let secret = Authentication.secret();
+        Assert.notEqual(null, secret);
+        Assert.ok(secret.length > 0);
+    });
+
+    it('Uses an existing secret if present', () => {
+        let expected = "test";
+        Config.setSecret(expected);
+        let actual = Authentication.secret();
+        Assert.equal(expected, actual);
+        Assert.equal(Config.secret(), actual);
+    });
+
+
+    after(() => {
+        Config.setSecret(null);
+        Config.save()
+    });
+});
 
 suite('Tests authentication storage providers.', () => {
     let implementations = ['file', 'ldap', 'mongodb'];

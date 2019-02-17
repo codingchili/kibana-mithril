@@ -35,6 +35,7 @@ fi
 # this must match the version of kibana.
 jq --arg version $version '.kibana.version = $version' package.json > $tmp_file && mv $tmp_file package.json
 jq --arg version $version '.authentication.kbnVersion = $version' config.json > $tmp_file && mv $tmp_file config.json
+jq --raw-output '.authentication.secret = null' config.json > $tmp_file && mv $tmp_file config.json
 
 dist="./build/dist/"
 build="./build/"

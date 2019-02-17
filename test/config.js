@@ -5,6 +5,7 @@
  */
 
 const Assert = require('assert');
+const Config = require('../src/config');
 
 describe('Configuration reader', () => {
 
@@ -40,6 +41,19 @@ describe('Configuration reader', () => {
         Assert.notEqual(config.cookie, null);
         Assert.notEqual(config.cookie.ttl, null);
         Assert.notEqual(config.secret, null);
+    });
+
+    it('Should save configuration to config.json when calling save()', () => {
+        let expected = "wowzayahoo";
+        Config.setSecret(expected);
+        Config.save();
+        Config.reload();
+        Assert.equal(expected, Config.secret());
+    });
+
+    after(() => {
+        Config.setSecret(null);
+        Config.save()
     });
 
 });
