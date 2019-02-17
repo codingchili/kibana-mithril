@@ -5,8 +5,10 @@
  */
 
 const JWT = require('jsonwebtoken');
-const Config = require('../config').get();
-let Storage = require('./' + Config.storage);
+const crypto = require('crypto');
+const Config = require('../config');
+let Storage = require('./' + Config.get().storage);
+
 
 module.exports = {
 
@@ -55,7 +57,19 @@ module.exports = {
                 groups: groups,
                 expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
             },
-            Config.authentication.secret);
+            module.exports.secret());
+    },
+
+    /**
+     * Returns the secret key used to sign tokens.
+     */
+    secret: function() {
+        if (!Config.secret()) {
+            // generate a random secret if none is set.
+            let secret = crypto.randomBytes(64).toString('base64');
+            Config.setSecret(secret);
+        }
+        return Config.secret();
     },
 
     /**
@@ -64,7 +78,7 @@ module.exports = {
      * @return Boolean
      */
     verifyToken: function (token) {
-        let decoded = JWT.verify(token, Config.authentication.secret);
+        let decoded = JWT.verify(token, Config.secret());
         let valid = (new Date().getTime() < decoded.expiry);
 
         if (!decoded || !valid) {

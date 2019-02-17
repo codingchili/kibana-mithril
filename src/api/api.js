@@ -6,7 +6,7 @@
 
 const Jade = require('pug');
 const Path = require('path');
-const Config = require('../config').load('authentication');
+const Config = require('../config');
 const TwoFactor = require('../authentication/twofactor');
 const Authentication = require('../authentication/auth');
 
@@ -25,7 +25,7 @@ module.exports = {
             path: '/logout',
 
             handler(request, h) {
-                return h.response().unstate(COOKIE_NAME, Config.cookie).code(200);
+                return h.response().unstate(COOKIE_NAME, cookie()).code(200);
             }
         });
 
@@ -37,7 +37,7 @@ module.exports = {
             handler(request, h) {
                 return Jade.renderFile(
                     Path.resolve(__dirname, '../../public/mithril.pug'), {
-                        "kbnVersion": Config['kbnVersion']
+                        "kbnVersion": Config.version()
                     });
             }
         });
@@ -69,7 +69,7 @@ module.exports = {
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
                                 if (success) {
                                     // 2FA key verified successfully.
-                                    h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), Config.cookie);
+                                    h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), cookie());
                                     resolve(h.response().code(200));
                                 } else {
                                     if (secret.verified === true) {
@@ -107,7 +107,7 @@ module.exports = {
 
             // needs to be registered so we can reference it from our custom strategy.
             server.auth.strategy('jwt', 'jwt', {
-                key: Config.secret,
+                key: Authentication.secret(),
                 validate: validate,
                 verifyOptions: {algorithms: ['HS256']}
             });
@@ -137,4 +137,9 @@ module.exports = {
 function validate(token, h) {
   let valid = new Date().getTime() < token.expiry;
   return {isValid: valid};
+}
+
+
+function cookie() {
+    return Config.load('authentication').cookie;
 }

@@ -57,8 +57,8 @@ describe('Server API Routing', () => {
                     Cookie: "token=" + Authentication.signToken('user', ['group1'])
                 }
             }).on('response', (response) => {
-            Assert.equal(response.statusCode, 200);
-            done();
+                Assert.equal(response.statusCode, 200);
+                done();
         });
     });
 
