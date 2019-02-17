@@ -13,7 +13,7 @@ const application = {
     view.loginStart();
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", '../mithril', true);
+    xhr.open("POST", window.basePath + '/mithril', true);
     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
     xhr.setRequestHeader('kbn-version', window.kbnVersion);
 
@@ -21,7 +21,7 @@ const application = {
         if (this.readyState === XMLHttpRequest.DONE) {
             switch (this.status) {
                 case 200:
-                    location.href = '/';
+                    location.href = '/' + window.basePath;
                     break;
                 case 406:
                     view.showTokenView(JSON.parse(this.responseText));

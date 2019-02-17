@@ -37,7 +37,8 @@ module.exports = {
             handler(request, h) {
                 return Jade.renderFile(
                     Path.resolve(__dirname, '../../public/mithril.pug'), {
-                        "kbnVersion": Config.version()
+                        'kbnVersion': Config.version(),
+                        'basePath': ''
                     });
             }
         });
@@ -95,7 +96,7 @@ module.exports = {
                         let credentials = await server.auth.test("jwt", request);
                         return h.authenticated({credentials: credentials});
                     } catch (e) {
-                        return h.redirect("/mithril").takeover();
+                        return h.redirect('/mithril').takeover();
                     }
                 }
             }

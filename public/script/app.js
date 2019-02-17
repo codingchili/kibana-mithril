@@ -6,6 +6,8 @@
 
 import angular from 'angular';
 import routes from 'ui/routes';
+import chrome from 'ui/chrome';
+
 import { uiModules } from 'ui/modules';
 
 import 'ui/autoload/styles';
@@ -29,7 +31,7 @@ app.controller('kibana-mithril', ($scope, $http) => {
 
   $scope.logout = () => {
 
-    $http.post('../logout', {}).then(
+    $http.post(chrome.addBasePath('/logout'), {}).then(
       function success() {
         window.location = '/';
       },
@@ -40,7 +42,7 @@ app.controller('kibana-mithril', ($scope, $http) => {
   };
 
   $scope.init = () => {
-    $http.get('../groups').then(
+    $http.get(chrome.addBasePath('/groups')).then(
       function success(request) {
         $scope.groups = request.data.groups;
       },
