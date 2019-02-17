@@ -29,7 +29,7 @@ module.exports = {
             Storage.getSecret(username, (exist, secret) => {
 
                 if (!exist) {
-                    callback(false, secret);
+                    callback(false, {verified: false});
                 } else {
                     let success = Speakeasy.totp.verify({
                             secret: secret.key,
