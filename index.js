@@ -10,76 +10,39 @@
  * so that the request may be processed in a context-aware manner.
  */
 
-const HapiJWT = require('hapi-auth-jwt2');
 const Filter = require('./src/api/filter');
 const API = require('./src/api/api');
 const Config = require('./src/config').load('authentication');
+const Logger = require('./src/logger');
+
 require('./src/authentication/auth');
 
 
 module.exports = function (kibana) {
-  console.log('kibana authentication plugin by codingchili@github init!');
+    return new kibana.Plugin({
+        name: 'kibana-mithril',
+        require: [],
+        uiExports: {
+            app: {
+                title: 'Mithril',
+                description: 'Mithril authentication plugin.',
+                main: 'plugins/kibana-mithril/script/app',
+                euiIconType: 'securityApp',
+                icon: 'plugins/kibana-mithril/img/icon.svg'
+            }
+        },
 
-  return new kibana.Plugin({
-    name: 'kbn-authentication-plugin',
-    require: [],
-    uiExports: {
-      app: {
-        title: 'Authentication',
-        description: 'Authentication management plugin',
-        main: 'plugins/kbn-authentication-plugin/script/app',
-        icon: 'plugins/kbn-authentication-plugin/img/icon.png'
-      }
-    },
+        config(Joi) {
+            return Joi.object({
+                enabled: Joi.boolean().default(true),
+            }).default()
+        },
 
-    config(Joi) {
-      return Joi.object({
-          enabled: Joi.boolean().default(true),
-      }).default()
-    },
-
-    init(server, options) {
-
-      Filter.proxy();
-      API.register(server);
-
-      // Login based scheme as a wrapper for JWT scheme.
-      server.auth.scheme("login", function (server, options) {
-        return {
-          authenticate: function (request, reply) {
-            server.auth.test("jwt", request, function (err, credentials) {
-              if (err) {
-                reply.redirect("/login")
-              } else {
-                reply.continue({credentials: credentials});
-              }
-            });
-          }
+        init: async function(server, options) {
+            Logger.writer(server);
+            Filter.proxy();
+            await API.register(server);
+            Logger.started();
         }
-      });
-
-      // JWT is used to provide authorization through JWT-cookies.
-      server.register(HapiJWT, function (err) {
-        server.auth.strategy('jwt', 'jwt', {
-          key: Config.secret,
-          validateFunc: validate,
-          verifyOptions: {algorithms: ['HS256']}
-        })
-      });
-
-      server.auth.strategy("login", "login", true);
-    }
-  });
+    });
 };
-
-/**
- * Verifies that the token carried by the request grants access to
- * the requested page or API/Index resource.
- *
- * @param token JWT token carried in a cookie.
- * @param request To be validated.
- * @param callback {error, success}
- */
-function validate(token, request, callback) {
-  callback(null, (new Date().getTime() < token.expiry));
-}

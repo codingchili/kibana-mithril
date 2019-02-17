@@ -9,17 +9,17 @@ const Assert = require('assert');
 const Mock = require('../mock/helper');
 const Hash = require('../../src/authentication/hash');
 
-describe('Password hashing', function () {
+describe('Password hashing', () => {
 
-    it('Should successfully hash a password.', function (done) {
-        Hash.password(Mock.PASSWORD, function (hash) {
+    it('Should successfully hash a password.', (done) => {
+        Hash.password(Mock.PASSWORD, (hash) => {
             Assert.notEqual(hash, null);
             done();
         });
     });
 
-    it('Should successfully verify plaintext against hash.', function (done) {
-        Hash.password(Mock.PASSWORD, function (hash) {
+    it('Should successfully verify plaintext against hash.', (done) => {
+        Hash.password(Mock.PASSWORD, (hash) => {
             Hash.verify(hash, Mock.PASSWORD, result => {
                 Assert.ok(result);
                 done();
@@ -27,8 +27,8 @@ describe('Password hashing', function () {
         });
     });
 
-    it('Should fail to verify non-matching plaintext to hash..', function (done) {
-        Hash.password(Mock.PASSWORD, function (hash) {
+    it('Should fail to verify non-matching plaintext to hash..', (done) => {
+        Hash.password(Mock.PASSWORD, (hash) => {
             Hash.verify(hash, Mock.PASSWORD_WRONG, result => {
                 Assert.ok(!result);
                 done();
@@ -36,8 +36,8 @@ describe('Password hashing', function () {
         });
     });
 
-    it('Hash must not be equal to plaintext.', function (done) {
-        Hash.password(Mock.PASSWORD, function (hash) {
+    it('Hash must not be equal to plaintext.', (done) => {
+        Hash.password(Mock.PASSWORD, (hash) => {
             Assert.notEqual(Mock.PASSWORD, hash);
             done();
         });

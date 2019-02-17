@@ -6,9 +6,12 @@
 
 const Jade = require('pug');
 const Path = require('path');
-const Config = require('../config').load('ldap');
+const Config = require('../config');
 const TwoFactor = require('../authentication/twofactor');
 const Authentication = require('../authentication/auth');
+const Logger = require('../logger');
+
+const COOKIE_NAME = 'token';
 
 module.exports = {
 
@@ -17,27 +20,29 @@ module.exports = {
      *
      * @param server Hapi server to register routes on.
      */
-    register: function (server) {
+    register: async function (server) {
+        let basePath = server.config().get('server.basePath');
 
         server.route({
             method: 'POST',
             path: '/logout',
 
-            handler(request, reply) {
-                reply().state('token', null);
+            handler(request, h) {
+                return h.response().unstate(COOKIE_NAME, cookie()).code(200);
             }
         });
 
         server.route({
             method: 'GET',
-            path: '/login',
+            path: '/mithril',
             config: {auth: false},
 
-            handler(request, reply) {
-                reply(Jade.renderFile(
-                    Path.resolve(__dirname, '../../public/login.jade'), {
-                        "kbnVersion": Config['kbnVersion']
-                    }));
+            handler(request, h) {
+                return Jade.renderFile(
+                    Path.resolve(__dirname, '../../public/mithril.pug'), {
+                        'kbnVersion': Config.version(),
+                        'basePath': basePath
+                    });
             }
         });
 
@@ -45,41 +50,130 @@ module.exports = {
             method: 'GET',
             path: '/groups',
 
-            handler(request, reply) {
-                reply({groups: request.auth.credentials.groups});
+            handler(request, h) {
+                return {groups: request.auth.credentials.groups};
             }
         });
 
         server.route({
             method: 'POST',
-            path: '/login',
+            path: '/mithril',
             config: {auth: false},
-            handler(request, reply) {
+            handler(request, h) {
                 const username = request.payload.username;
                 const password = request.payload.password;
                 const nonce = request.payload.nonce;
 
-                Authentication.authenticate(username, password, (err, user) => {
+                return new Promise((resolve, reject) => {
+                    Authentication.authenticate(username, password, (err, user) => {
 
                         if (err || !user) {
-                            reply().code(401);
+                            Logger.failedAuthentication(username, source(request));
+                            resolve(h.response().code(401));
                         } else {
+                            // only log succeeded authentication if its not a 2FA attempt.
+                            if (!TwoFactor.enabled() || nonce === '') {
+                                Logger.succeededAuthentication(user.uid, source(request));
+                            }
 
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
-
                                 if (success) {
-                                    reply().state('token', Authentication.signToken(user.uid, user.groups), Config.cookie);
-                                } else if (secret.verified === true) {
-                                    reply({"error": (nonce)}).code(406);
+                                    if (TwoFactor.enabled()) {
+                                        Logger.succeeded2FA(user.uid, source(request));
+                                    }
+
+                                    h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), cookie());
+                                    resolve(h.response().code(200));
                                 } else {
-                                    reply(TwoFactor.create(user.uid)).code(406);
+                                    if (nonce != '') {
+                                        // if nonce is unset then it wasn't a 2FA verification request.
+                                        Logger.failed2FA(user.uid, source(request));
+                                    }
+
+                                    if (secret.verified === true) {
+                                        // secret already verified return an error.
+                                        resolve(h.response({"error": (nonce)}).code(406));
+                                    } else {
+                                        // secret is not verified - return a new qr/code.
+                                        resolve(h.response(TwoFactor.create(user.uid)).code(406));
+                                    }
                                 }
                             });
-
                         }
-                    }
-                );
+                    });
+                });
             }
         });
+
+        // Login based scheme as a wrapper for JWT scheme.
+        server.auth.scheme("mithril", (server, options) => {
+            return {
+                authenticate: async (request, h) => {
+                    try {
+                        let credentials = await server.auth.test("jwt", request);
+                        return h.authenticated({credentials: credentials});
+                    } catch (e) {
+                        Logger.unauthorized(request.url.path, source(request));
+                        return h.redirect(`${basePath}/mithril`).takeover();
+                    }
+                }
+            }
+        });
+
+        // JWT is used to provide authorization through JWT-cookies.
+        try {
+            await server.register(require('hapi-auth-jwt2'));
+
+            // needs to be registered so we can reference it from our custom strategy.
+            server.auth.strategy('jwt', 'jwt', {
+                key: Authentication.secret(),
+                validate: validate,
+                verifyOptions: {algorithms: ['HS256']}
+            });
+
+            server.auth.strategy("mithril", "mithril", {});
+
+            // hack to override the default strategy that is already set by x-pack.
+            server.auth.settings.default = null;
+
+            server.auth.default("mithril");
+        } catch (err) {
+            throw err;
+        }
+
     }
 };
+
+
+/**
+ * Verifies that the token carried by the request grants access to
+ * the requested page or API/Index resource.
+ *
+ * @param token JWT token carried in a cookie.
+ * @param request To be validated.
+ * @param callback {error, success}
+ */
+function validate(token, h) {
+  let valid = new Date().getTime() < token.expiry;
+  return {isValid: valid};
+}
+
+
+/**
+* Return the cookie configuration from config.json.
+*/
+function cookie() {
+    return Config.load('authentication').cookie;
+}
+
+/**
+* Grabs the remote IP of the client, supports extracting the
+* X-Forwarded-For header but always includes both the header value
+* and the proxy's IP address (to prevent spoofing the logs).
+*/
+function source(request) {
+    return {
+        ip: request.info.remoteAddress,
+        forwarded: request.headers['x-forwarded-for']
+    };
+}

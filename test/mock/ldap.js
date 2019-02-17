@@ -5,7 +5,7 @@ let init = false;
 
 module.exports = {
 
-    init: function () {
+    init: () => {
         if (!init) {
             Server.listen(10388, '0.0.0.0');
             Server.bind('uid=admin,ou=system', authenticateAdmin);

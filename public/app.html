@@ -1,0 +1,13 @@
+<div class="center-box" ng-controller="kibana-mithril" data-ng-init="init()">
+    <span class="title">Groups</span>
+        <ul>
+            <li ng-repeat="name in groups">
+                <span class="box-text">
+                    {{name}}
+                </span>
+            </li>
+        </ul>
+    <form ng-submit="logout()">
+        <input class="euiButton euiButton--primary euiButton--small button" type="submit" value="LOGOUT"/>
+    </form>
+</div>

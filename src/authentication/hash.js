@@ -6,7 +6,7 @@
 
 const argon2 = require('argon2-ffi').argon2i;
 const crypto = require('crypto');
-const options = {timeCost: 4, memoryCost: 1 << 14, parallelism: 2, hashLength: 64};
+const options = {timeCost: 4, memoryCost: 1 << 14, parallelism: 1, hashLength: 64};
 
 module.exports = {
 

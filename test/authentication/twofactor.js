@@ -9,29 +9,29 @@ const Assert = require('assert');
 
 const USERNAME = 'test-username';
 
-describe('Two-factor authentication', function () {
+describe('Two-factor authentication', () => {
 
-    it('Should generate a qr-svg image.', function () {
+    it('Should generate a qr-svg image.', () => {
         let svg = TwoFactor.create(USERNAME).svg;
         Assert.equal(svg.startsWith('<svg'), true);
     });
 
-    it('Should generate a text-based secret.', function () {
+    it('Should generate a text-based secret.', () => {
         let secret = TwoFactor.create(USERNAME).text;
         Assert.notEqual(secret, null);
     });
 
-    it('Should not bind to a secret before verifying once.', function () {
+    it('Should not bind to a secret before verifying once.', () => {
         TwoFactor.create(USERNAME);
 
-        TwoFactor.verify(USERNAME, null, function (result, secret) {
+        TwoFactor.verify(USERNAME, null, (result, secret) => {
             Assert.equal(secret.verified, false);
             Assert.equal(result, false);
 
-            TwoFactor.verify(USERNAME, TwoFactor.generate(secret.key), function (result) {
+            TwoFactor.verify(USERNAME, TwoFactor.generate(secret.key), (result) => {
                 Assert.equal(result, true);
 
-                TwoFactor.enabled(USERNAME, function (enabled) {
+                TwoFactor.enabled(USERNAME, (enabled) => {
                     Assert.equal(enabled, true);
                 })
             });
@@ -39,35 +39,35 @@ describe('Two-factor authentication', function () {
         });
     });
 
-    it('Should verify a valid token from a secret.', function () {
+    it('Should verify a valid token from a secret.', () => {
         let secret = TwoFactor.create(USERNAME);
         let token = TwoFactor.generate(secret.text);
 
-        TwoFactor.verify(USERNAME, token, function (success) {
+        TwoFactor.verify(USERNAME, token, (success) => {
             Assert.equal(success, true);
         });
 
     });
 
-    it('Should reject a token from an invalid secret.', function () {
+    it('Should reject a token from an invalid secret.', () => {
         TwoFactor.create(USERNAME);
 
-        TwoFactor.verify(USERNAME, 'invalid', function (success) {
+        TwoFactor.verify(USERNAME, 'invalid', (success) => {
             Assert.equal(success, false);
         });
     });
 
-    it('Should bind secrets to usernames.', function () {
+    it('Should bind secrets to usernames.', () => {
         let secret = TwoFactor.create(USERNAME);
         let token = TwoFactor.generate(secret.key);
 
-        TwoFactor.verify('other-user', token, function (success) {
+        TwoFactor.verify('other-user', token, (success) => {
             Assert.equal(success, false);
         });
     });
 
 
-    it('Should not require 2FA when disabled', function (done) {
+    it('Should not require 2FA when disabled', (done) => {
 
         TwoFactor.create(USERNAME);
 

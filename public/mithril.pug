@@ -4,9 +4,10 @@ html(lang="EN")
     title Authorization Required
     style
       include style/style.css
-      include style/login.css
+      include style/mithril.css
     script.
       var kbnVersion = "#{kbnVersion}";
+      var basePath = "#{basePath}"
   body
     div.page-header
       h2.header-text Kibana #{kbnVersion}
@@ -31,7 +32,6 @@ html(lang="EN")
         button(onclick='submit();').euiButton.euiButton--primary.euiButton--small.button#submit LOGIN
 
     div.page-footer
-        h5.page-footer-text &copy;2017 Robin Duda
+        h5.page-footer-text &copy;2019 Robin Duda
     script
-      include script/jquery-2.2.3.min.js
-      include script/login.js
+      include script/mithril.js
