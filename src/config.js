@@ -11,11 +11,11 @@ const CONFIG_PATH = require('path').resolve(__dirname, '../config.json');
 const PACKAGE_PATH = require('path').resolve(__dirname, '../package.json');
 
 let config;
-let package;
+let pkg;
 
 function load() {
     config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
-    package = JSON.parse(fs.readFileSync(PACKAGE_PATH, 'utf-8'));
+    pkg = JSON.parse(fs.readFileSync(PACKAGE_PATH, 'utf-8'));
 }
 
 load();
@@ -78,14 +78,14 @@ module.exports = {
      * Returns the version of the plugin from package.json.
      */
     pluginVersion: () => {
-        return package['version'];
+        return pkg['version'];
     },
 
     /**
      * Returns the name of the plugin from package.json.
      */
     pluginName: () => {
-        return package['name'];
+        return pkg['name'];
     },
 
     /**

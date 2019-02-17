@@ -7,6 +7,10 @@
 
 const config = require('./config');
 
+const ERROR = 'error';
+const WARNING = 'warning';
+const INFO = 'info';
+
 let plugin = config.pluginName();
 let version = config.pluginVersion();
 let writer;
@@ -25,7 +29,7 @@ module.exports = {
     */
     log: (line, level) => {
         level = level || 'info';
-        writer.log([level, 'status', `plugin:${plugin}@${version}`], line);
+        writer.log([level, `plugin:${plugin}@${version}`], line);
     },
 
     /**
@@ -46,21 +50,21 @@ module.exports = {
      * Call when an authentication attempt has been  made.
      */
     failedAuthentication: (user, source) => {
-        log(`authentication failed for user ${user} from ${ip(source)}`);
-    },
-
-     /**
-     * Call when two-factor verification has failed.
-     */
-    failed2FA: (user, source) => {
-        log(`2FA verification failed for user ${user} from ${ip(source)}`);
+        log(`authentication failed for user ${user} from ${ip(source)}`, WARNING);
     },
 
     /**
      * Call when 2FA verification has succeeded.
      */
     succeeded2FA: (user, source) => {
-        log(`2FA verification failed for user ${user} from ${ip(source)}`);
+        log(`2FA verification succeeded for user ${user} from ${ip(source)}`);
+    },
+
+     /**
+     * Call when two-factor verification has failed.
+     */
+    failed2FA: (user, source) => {
+        log(`2FA verification failed for user ${user} from ${ip(source)}`, WARNING);
     },
 
     /**
@@ -68,6 +72,13 @@ module.exports = {
      */
     unauthorized: (path, source) => {
         log(`blocked unauthorized access to ${path} from ${ip(source)}`);
+    },
+
+    /**
+    * Call when a new HMAC key is generated.
+    */
+    generatedSecret: () => {
+        log(`generated random secret for signing tokens.`);
     }
 };
 

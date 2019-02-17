@@ -68,12 +68,12 @@ module.exports = {
                     Authentication.authenticate(username, password, (err, user) => {
 
                         if (err || !user) {
-                            Logger.failedAuthentication(user.uid, source(request));
+                            Logger.failedAuthentication(username, source(request));
                             resolve(h.response().code(401));
                         } else {
                             // only log succeeded authentication if its not a 2FA attempt.
                             if (!TwoFactor.enabled() || nonce === '') {
-                                Logger.authenticationSucceeded(user.uid, source(request));
+                                Logger.succeededAuthentication(user.uid, source(request));
                             }
 
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
@@ -85,7 +85,10 @@ module.exports = {
                                     h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), cookie());
                                     resolve(h.response().code(200));
                                 } else {
-                                    Logger.failed2FA(user.uid, source(request));
+                                    if (nonce != '') {
+                                        // if nonce is unset then it wasn't a 2FA verification request.
+                                        Logger.failed2FA(user.uid, source(request));
+                                    }
 
                                     if (secret.verified === true) {
                                         // secret already verified return an error.

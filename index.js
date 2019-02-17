@@ -39,10 +39,6 @@ module.exports = function (kibana) {
         },
 
         init: async function(server, options) {
-            console.log('WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT');
-            server.log(['info'], 'plugin init wow');
-            console.log('WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOT');
-
             Logger.writer(server);
             Filter.proxy();
             await API.register(server);

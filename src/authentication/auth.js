@@ -7,6 +7,8 @@
 const JWT = require('jsonwebtoken');
 const crypto = require('crypto');
 const Config = require('../config');
+const Logger = require('../logger');
+
 let Storage = require('./' + Config.get().storage);
 
 
@@ -68,6 +70,7 @@ module.exports = {
             // generate a random secret if none is set.
             let secret = crypto.randomBytes(64).toString('base64');
             Config.setSecret(secret);
+            Logger.generatedSecret();
         }
         return Config.secret();
     },
