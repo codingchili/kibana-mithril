@@ -1,43 +1,43 @@
 {
-    "storage": "file",
-    "two-factor": {
-        "enabled": true,
-        "length": 16
+  "storage": "file",
+  "two-factor": {
+    "enabled": true,
+    "length": 16
+  },
+  "proxy": {
+    "enabled": false,
+    "port": 7575,
+    "remote": "localhost:5601"
+  },
+  "authentication": {
+    "kbnVersion": "7.0.0-beta1",
+    "cookie": {
+      "ttl": 1209600,
+      "path": "/",
+      "encoding": "none",
+      "isSecure": false,
+      "isHttpOnly": true,
+      "clearInvalid": true,
+      "strictHeader": true
     },
-    "proxy": {
-        "enabled": false,
-        "port": 7575,
-        "remote": "localhost:5601"
+    "secret": null
+  },
+  "file": {
+    "filename": "users.json"
+  },
+  "ldap": {
+    "url": "ldap://127.0.0.1:10388",
+    "admin": {
+      "dn": "uid=admin,ou=system",
+      "password": "secret"
     },
-    "authentication": {
-        "kbnVersion": "7.0.0-alpha1",
-        "cookie": {
-            "ttl": 1209600,
-            "path": "/",
-            "encoding": "none",
-            "isSecure": false,
-            "isHttpOnly": true,
-            "clearInvalid": true,
-            "strictHeader": true
-        },
-        "secret": null
-    },
-    "file": {
-        "filename": "users.json"
-    },
-    "ldap": {
-        "url": "ldap://127.0.0.1:10388",
-        "admin": {
-            "dn": "uid=admin,ou=system",
-            "password": "secret"
-        },
-        "search": {
-            "scope": "sub",
-            "user-dn": "ou=users,ou=system",
-            "group-dn": "ou=groups,ou=system"
-        }
-    },
-    "mongodb": {
-        "remote": "mongodb://localhost/plugin"
+    "search": {
+      "scope": "sub",
+      "user-dn": "ou=users,ou=system",
+      "group-dn": "ou=groups,ou=system"
     }
+  },
+  "mongodb": {
+    "remote": "mongodb://localhost/plugin"
+  }
 }

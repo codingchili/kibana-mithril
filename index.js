@@ -17,8 +17,6 @@ require('./src/authentication/auth');
 
 
 module.exports = function (kibana) {
-    console.log(`kibana authentication plugin by codingchili@github init!`);
-
     return new kibana.Plugin({
         name: 'kibana-mithril',
         require: [],
@@ -41,6 +39,7 @@ module.exports = function (kibana) {
         init: async function(server, options) {
             Filter.proxy();
             await API.register(server);
+            server.log(['info', 'status', 'plugin:mithril@1.2.0'], `authentication plugin enabled.`);
         }
     });
 };

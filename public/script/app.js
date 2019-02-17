@@ -33,11 +33,11 @@ app.controller('kibana-mithril', ($scope, $http) => {
 
     $http.post(chrome.addBasePath('/logout'), {}).then(
       function success() {
-        window.location = '/';
+        window.location = chrome.addBasePath('/');
       },
       function error() {
         window.alert('Not logged in.');
-        window.location = '/';
+        window.location = chrome.addBasePath('/');
       })
   };
 

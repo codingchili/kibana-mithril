@@ -20,6 +20,8 @@ module.exports = {
      * @param server Hapi server to register routes on.
      */
     register: async function (server) {
+        let basePath = server.config().get('server.basePath');
+
         server.route({
             method: 'POST',
             path: '/logout',
@@ -38,7 +40,7 @@ module.exports = {
                 return Jade.renderFile(
                     Path.resolve(__dirname, '../../public/mithril.pug'), {
                         'kbnVersion': Config.version(),
-                        'basePath': ''
+                        'basePath': basePath
                     });
             }
         });
@@ -96,7 +98,7 @@ module.exports = {
                         let credentials = await server.auth.test("jwt", request);
                         return h.authenticated({credentials: credentials});
                     } catch (e) {
-                        return h.redirect('/mithril').takeover();
+                        return h.redirect(`${basePath}/mithril`).takeover();
                     }
                 }
             }

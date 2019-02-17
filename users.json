@@ -1,7 +1,7 @@
 {
     "username": {
         "uid": "username",
-        "password": "$argon2i$v=19$m=16384,t=4,p=1$mNZklTWbdKkZCsoRM+rb8vB/1be1c4YNDGHMvWfei/Y$kK9D8shiXHGH0QTi4l7H5w18ZlQ9B/jtRHCTK1MLbS3+r2bu7+wWpr+MWkGaJoFZfly2ADL41dlJUVSXOmCZ9Q",
+        "password": "$argon2i$v=19$m=16384,t=4,p=1$JrwphmEAxQB9RdI3ggXYn8brvBiRJ3GMj76myZMAc/Q$MG/7sHaeCWaL4S12v3jt2wTyjD3YUg8dDuzqKjPBcrMCjKc6B4Cohp6k79lgG/o4MGFmEH5Oz3OEztjN+PJS3g",
         "groups": [
             "default"
         ],
@@ -11,7 +11,7 @@
     },
     "test-username": {
         "secret": {
-            "key": "KRJF2JSOFFXDUI2LJA7DOM3IHI",
+            "key": "FQYVKSZYLAVDEJRIIEVDOUBIIY",
             "verified": false
         }
     }

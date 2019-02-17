@@ -21,7 +21,11 @@ const application = {
         if (this.readyState === XMLHttpRequest.DONE) {
             switch (this.status) {
                 case 200:
-                    location.href = '/' + window.basePath;
+                    if (window.basePath === '') {
+                        location.href = '/';
+                    } else {
+                        location.href = window.basePath;
+                    }
                     break;
                 case 406:
                     view.showTokenView(JSON.parse(this.responseText));

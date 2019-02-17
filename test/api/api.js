@@ -34,6 +34,15 @@ describe('Server API Routing', () => {
             }
         });
 
+        // decorated by kibana.
+        server.config = () => {
+            return {
+                get: (key) => {
+                    return '';
+                }
+            }
+        };
+
         await plugin.init(server, {});
         await server.start();
     });
