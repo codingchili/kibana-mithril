@@ -27,4 +27,4 @@ deploy:
     secure: C4Wc30K1bdWeODeSTaoGUqd7OgsSoSJL5iC0dyfHNsLOvp+NzY/Ws7YL/cXeCF7scNFTfCDnjWqC5231Y1490IkMun05QYOMDoum52arTYVhGrfJwXeNOLG4O0KISXsCzhD55vBAslI7Y6Nb6idK4hhdfk+15Apzx7bsY5llxGgSklf7lRetZh3jPeL+IcIHz5XxbiQseDDNyP6DuxLjfZLNvWTyi2rlaLkg6koIHrf+Gy+aV9UM+prXwGSwby8Mnpsvvi8k2RCzRZwG6+LzifayOYstXI2GG/fAlNfSLdEwKhQkGi+bqCZaXuUQpb9oKN7SY4iGiZfJ4Fh9J6Uzlk/ruJvovgguOLi7dkbNUvvNCvEyGJkQ1IouA2a31KgHyr8tSESlN2pzLKtjPmAIQe3y4LcqDFFtoK8zlr7FtAfwTf4xjMkQ4rGTGS4us4ygpDkT08arutc3HUu0vXe3gJQUlypXRiLQIdt/7uUC7gzy/RGhaDzZbuhV0XQFoxlN2PwSm0bz74pJm/LQM7YlSo4pq+oUcA6rbCtThgV4zHo2rxlC/c7m+BFKxcBRpG/QAxpQ6CxAKdo+wceoeawI7mGVt7PV+nk1ovS/EpJOlWi8H0EMhTrFKOP/g6HCivr+PvK45+7vtNbJLpWrN2cHXQK+tsGVbuOM6q4TwLQODbk=
   file: "./build/dist/*"
   on:
-    repo: codingchili/kibana-mithril
+    tags: true
