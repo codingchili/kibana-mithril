@@ -3,7 +3,7 @@ A plugin adds authentication to Kibana dashboards! [YouTube demo](https://www.yo
 
 ![key setup](https://raw.githubusercontent.com/codingchili/kibana-mithril/master/key-setup.png)
 
-#### Installing
+# Installing
 To install the plugin use the kibana-plugin utility, example:
 ```
 ./kibana-plugin install 'https://github.com/codingchili/kibana-mithril/releases/download/1.2.0/mithril-windows-x86_64-7.0.0-beta1.zip'
@@ -22,7 +22,7 @@ To add a new user run the adduser utility, not supported in LDAP mode.
 node adduser.js USERNAME PASSWORD
 ```
 
-#### Configuration
+### Configuration
 
 To set where credentials are stored, change 'storage' in config.json. The supported modes are:
 - "mongodb", stores users in a mongodb database.
@@ -58,7 +58,7 @@ In `config.js` there is some sample configuration for setting up LDAP connectivi
 Make sure to set the correct version in json.config. The version must match the version of Kibana being used.
 If you are using file-based authentication, make sure to remove the default user.
 
-#### Features
+# Features
 - two factor authentication with [time based tokens](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm).
 - supports scanning a barcode in the [Google Authenticator](https://www.google.se/search?q=Google+authenticator) app for example.
 - supports storing user credentials and keys in a simple json file.
@@ -69,7 +69,7 @@ If you are using file-based authentication, make sure to remove the default user
   - See: [Argon2](https://password-hashing.net/)
 - logs succeeded and failed login attempts.
 
-#### Building the plugin
+### Building the plugin
 To check out the sources and build the plugin do the following
 ```
 git clone https://github.com/codingchili/kibana-mithril
@@ -91,7 +91,7 @@ mocha test --recursive -u tdd
 The script can either be executed on a windows machine with gitbash or WSL or on a linux system.
 jq needs to be installed and available on the path for the script to work.
 
-##### Dependencies
+### Dependencies
 
 - NodeJS 8.11.2+
 - NPM
@@ -108,7 +108,7 @@ unix:
 ```
 This installs MS build tools and python 2.7 and is required for node-gyp to work.
 
-##### Troubleshooting
+## Troubleshooting
 If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance.
 
 **Kibana compatibility matrix**
@@ -120,7 +120,7 @@ If the Kibana instance is already running it may be set to reload all plugins on
 - make sure that the native modules are compiled with the same arch as kibanas bundled node.
 
 
-##### Known issues
+## Known issues
 
 - Multi-user capabilities is not completed, all authenticated users share the same indice and dashboards.
 - A warning appears on startup stating that the N-API is experimental.
