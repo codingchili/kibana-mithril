@@ -9,6 +9,7 @@ const Path = require('path');
 const Config = require('../config');
 const TwoFactor = require('../authentication/twofactor');
 const Authentication = require('../authentication/auth');
+const Logger = require('../logger');
 
 const COOKIE_NAME = 'token';
 
@@ -67,14 +68,25 @@ module.exports = {
                     Authentication.authenticate(username, password, (err, user) => {
 
                         if (err || !user) {
+                            Logger.failedAuthentication(user.uid, source(request));
                             resolve(h.response().code(401));
                         } else {
+                            // only log succeeded authentication if its not a 2FA attempt.
+                            if (!TwoFactor.enabled() || nonce === '') {
+                                Logger.authenticationSucceeded(user.uid, source(request));
+                            }
+
                             TwoFactor.verify(user.uid, nonce, (success, secret) => {
                                 if (success) {
-                                    // 2FA key verified successfully.
+                                    if (TwoFactor.enabled()) {
+                                        Logger.succeeded2FA(user.uid, source(request));
+                                    }
+
                                     h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), cookie());
                                     resolve(h.response().code(200));
                                 } else {
+                                    Logger.failed2FA(user.uid, source(request));
+
                                     if (secret.verified === true) {
                                         // secret already verified return an error.
                                         resolve(h.response({"error": (nonce)}).code(406));
@@ -98,6 +110,7 @@ module.exports = {
                         let credentials = await server.auth.test("jwt", request);
                         return h.authenticated({credentials: credentials});
                     } catch (e) {
+                        Logger.unauthorized(request.url.path, source(request));
                         return h.redirect(`${basePath}/mithril`).takeover();
                     }
                 }
@@ -143,6 +156,21 @@ function validate(token, h) {
 }
 
 
+/**
+* Return the cookie configuration from config.json.
+*/
 function cookie() {
     return Config.load('authentication').cookie;
+}
+
+/**
+* Grabs the remote IP of the client, supports extracting the
+* X-Forwarded-For header but always includes both the header value
+* and the proxy's IP address (to prevent spoofing the logs).
+*/
+function source(request) {
+    return {
+        ip: request.info.remoteAddress,
+        forwarded: request.headers['x-forwarded-for']
+    };
 }

@@ -13,6 +13,8 @@
 const Filter = require('./src/api/filter');
 const API = require('./src/api/api');
 const Config = require('./src/config').load('authentication');
+const Logger = require('./src/logger');
+
 require('./src/authentication/auth');
 
 
@@ -37,9 +39,14 @@ module.exports = function (kibana) {
         },
 
         init: async function(server, options) {
+            console.log('WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT');
+            server.log(['info'], 'plugin init wow');
+            console.log('WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOT');
+
+            Logger.writer(server);
             Filter.proxy();
             await API.register(server);
-            server.log(['info', 'status', 'plugin:mithril@1.2.0'], `authentication plugin enabled.`);
+            Logger.started();
         }
     });
 };

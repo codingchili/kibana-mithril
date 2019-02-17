@@ -72,10 +72,17 @@ module.exports = {
      * @param username specifies the user.
      * @param callback Function {Boolean}
      */
-    enabled: function (username, callback) {
+    active: function (username, callback) {
         Storage.getSecret(username, (enabled, secret) => {
             callback(enabled, secret);
         });
+    },
+
+    /**
+    * Return true if 2FA is enabled.
+    */
+    enabled: () => {
+        return Config.enabled;
     },
 
     /**
