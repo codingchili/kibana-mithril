@@ -3,7 +3,7 @@ os:
   - linux
   - windows
 node_js:
-- 8.7.0
+- 10.15.1
 env:
 - CXX=g++-4.8
 addons:
@@ -15,7 +15,7 @@ addons:
 install:
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install jq; fi
   - npm install
-  - npm install mocha -g
+  - npm install mocha@5.2.0 -g
 script:
   - mocha test --recursive -u tdd --exit
 before_deploy:
