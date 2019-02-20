@@ -120,7 +120,6 @@ If the Kibana instance is already running it may be set to reload all plugins on
 - make sure that the version in package.json is matching your kibana version.
 - make sure that the native modules are compiled with the same arch as kibanas bundled node.
 
-
 ## Known issues
 
 - Multi-user capabilities is not completed, all authenticated users share the same indice and dashboards.
@@ -132,3 +131,7 @@ compatibility is seldom prioritized. Lack of documentation and quality is a cons
 the heavy cost of upgrading there are few resources for adding new features. The upgrade from
 Kibana 6.3.2 to 6.4.X came with a truckload of breaking changes and took a week to finish.*
 
+# Contributing
+Any contributions are welcome, new issues, pull requests, security reviews!
+
+[![donate](https://img.shields.io/badge/donate-%CE%9ETH%20/%20%C9%83TC-ff00cc.svg?style=flat&logo=ethereum)](https://commerce.coinbase.com/checkout/673e693e-be6d-4583-9791-611da87861e3)
