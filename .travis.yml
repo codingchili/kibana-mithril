@@ -16,7 +16,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install jq; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install zip; fi
   - npm install
-  - npm install mocha -g
+  - npm install mocha@5.2.0 -g
 script:
   - mocha test --recursive -u tdd --exit
 before_deploy:
