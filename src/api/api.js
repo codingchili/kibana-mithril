@@ -70,7 +70,7 @@ module.exports = {
                         if (err || !user) {
                             Logger.failedAuthentication(username, source(request));
 
-                            if (err) {
+                            if (err && Config.authentication.verbose) {
                                 Logger.error(err);
                             }
 

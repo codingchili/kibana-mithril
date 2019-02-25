@@ -10,6 +10,7 @@
         "remote": "localhost:5601"
     },
     "authentication": {
+        "verbose": true,
         "kbnVersion": "6.6.0",
         "cookie": {
             "ttl": 1209600,
