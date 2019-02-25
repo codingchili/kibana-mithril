@@ -69,6 +69,11 @@ module.exports = {
 
                         if (err || !user) {
                             Logger.failedAuthentication(username, source(request));
+
+                            if (err) {
+                                Logger.error(err);
+                            }
+
                             resolve(h.response().code(401));
                         } else {
                             // only log succeeded authentication if its not a 2FA attempt.
@@ -81,7 +86,6 @@ module.exports = {
                                     if (TwoFactor.enabled()) {
                                         Logger.succeeded2FA(user.uid, source(request));
                                     }
-
                                     h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), cookie());
                                     resolve(h.response().code(200));
                                 } else {

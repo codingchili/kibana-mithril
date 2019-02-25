@@ -79,6 +79,13 @@ module.exports = {
     */
     generatedSecret: () => {
         log(`generated random secret for signing tokens.`);
+    },
+
+    /**
+    * Logs the given Error message with level ERROR.
+    */
+    error: (err) => {
+        log(err, ERROR);
     }
 };
 
