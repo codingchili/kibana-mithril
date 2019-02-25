@@ -14,9 +14,7 @@ const usernameAttribute = Config.search['user-name'];
 
 // error handling in the LDAP library fails to handle certain errors for some vendors.
 process.on('uncaughtException', (err) => {
-	const {msg, stack} = err;
-	console.log(msg);
-	console.log(stack);
+	Logger.error(err);
 });
 
 client.bind(Config.admin.dn, Config.admin.password, err => {
