@@ -113,8 +113,8 @@ This installs MS build tools and python 2.7 and is required for node-gyp to work
 If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance.
 
 **Kibana compatibility matrix**
-- 1.1.0 is compatible with 5.6.4 -> 6.3.2
-- 1.2.0 is compatible with 6.6.0 -> 7.0.0-beta1
+- 1.1.0 is compatible with 5.6.4 -> 6.3.2 (requires editing package.json version)
+- 1.2.1 is compatible with 6.6.0, 6.6.1 and 7.0.0-beta1.
 
 **If you have issues installing the plugin**,
 - make sure that the version in package.json is matching your kibana version.
