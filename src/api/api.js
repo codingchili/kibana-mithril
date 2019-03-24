@@ -128,7 +128,8 @@ module.exports = {
             server.auth.strategy('jwt', 'jwt', {
                 key: Authentication.secret(),
                 validate: validate,
-                verifyOptions: {algorithms: ['HS256']}
+                verifyOptions: {algorithms: ['HS256']},
+                cookieKey: COOKIE_NAME
             });
 
             server.auth.strategy("mithril", "mithril", {});
