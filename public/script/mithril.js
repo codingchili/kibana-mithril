@@ -34,10 +34,10 @@ const application = {
                     view.authenticationFailure();
                     break;
                 default:
-                    console.log("unsupported response code: " + this.status);
+                    console.log("unexpected response: " + this.status + " " + this.responseText);
             }
         }
-    }
+    };
 
     xhr.send(JSON.stringify({
            username: view.username.value,
