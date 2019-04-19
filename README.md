@@ -101,7 +101,7 @@ jq needs to be installed and available on the path for the script to work.
 - jq
 
 To compile the binary module argon2-ffi build tools are requried, install with
-```
+```console
 windows: 
   npm install --global --production windows-build-tools
 unix:    
