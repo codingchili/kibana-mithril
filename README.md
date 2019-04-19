@@ -5,7 +5,7 @@ A plugin that adds authentication to Kibana dashboards! [YouTube demo](https://w
 
 # Installing
 To install the plugin use the kibana-plugin utility, example:
-```
+```console
 ./kibana-plugin install 'https://github.com/codingchili/kibana-mithril/releases/download/1.2.1/mithril-windows-x86_64-7.0.0-beta1.zip'
 ```
 
@@ -18,7 +18,7 @@ If there are no releases for your specific version/platform combination please s
 - Mithril 1.2.1 supports using a basePath if rewriteBasePath is set to true. (default in 7.0.0).
 
 To add a new user run the adduser utility, not supported in LDAP mode.
-```
+```console
 node adduser.js USERNAME PASSWORD
 ```
 
@@ -72,7 +72,7 @@ If you are using file-based authentication, make sure to remove the default user
 
 ### Building the plugin
 To check out the sources and build the plugin do the following
-```
+```console
 git clone https://github.com/codingchili/kibana-mithril
 cd kibana-mithril
 npm install
@@ -80,7 +80,7 @@ mocha test --recursive -u tdd
 ```
 
 **To build an installable zip run the following script**
-```
+```console
 # make sure to match the kibana version
 ./release.sh <kibana-version>
 # example:
