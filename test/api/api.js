@@ -9,10 +9,11 @@ const Hapi = require('hapi');
 const Request = require('request');
 const API = require('../../src/api/api');
 const index = require('../../index');
-//require('../mock/ldap');
+const Config = require('../../src/config');
 const Authentication = require('../../src/authentication/auth');
 
 const PORT = 5810;
+const COOKIE_NAME = Config.load('authentication').cookieName;
 
 function url(resource) {
     return 'http://127.0.0.1:' + PORT + '/' + resource;
@@ -63,7 +64,7 @@ describe('Server API Routing', () => {
             .post({
                 uri: url('logout'),
                 headers: {
-                    Cookie: "token=" + Authentication.signToken('user', ['group1'])
+                    Cookie: COOKIE_NAME + "=" + Authentication.signToken('user', ['group1'])
                 }
             }).on('response', (response) => {
                 Assert.equal(response.statusCode, 200);
@@ -78,7 +79,7 @@ describe('Server API Routing', () => {
             .post({
                 uri: url('logout'),
                 headers: {
-                    Cookie: "token=invalid"
+                    Cookie: COOKIE_NAME + "=invalid"
                 }
             }).on('response', (response) => {
             Assert.equal(response.statusCode, 302);

@@ -11,8 +11,6 @@ const TwoFactor = require('../authentication/twofactor');
 const Authentication = require('../authentication/auth');
 const Logger = require('../logger');
 
-const COOKIE_NAME = 'token';
-
 module.exports = {
 
     /**
@@ -28,7 +26,7 @@ module.exports = {
             path: '/logout',
 
             handler(request, h) {
-                return h.response().unstate(COOKIE_NAME, cookie()).code(200);
+                return h.response().unstate(cookieName(), cookie()).code(200);
             }
         });
 
@@ -82,7 +80,7 @@ module.exports = {
                                         Logger.succeeded2FA(user.uid, source(request));
                                     }
 
-                                    h.state(COOKIE_NAME, Authentication.signToken(user.uid, user.groups), cookie());
+                                    h.state(cookieName(), Authentication.signToken(user.uid, user.groups), cookie());
                                     resolve(h.response().code(200));
                                 } else {
                                     if (nonce != '') {
@@ -128,7 +126,8 @@ module.exports = {
             server.auth.strategy('jwt', 'jwt', {
                 key: Authentication.secret(),
                 validate: validate,
-                verifyOptions: {algorithms: ['HS256']}
+                verifyOptions: {algorithms: ['HS256']},
+                cookieKey: cookieName()
             });
 
             server.auth.strategy("mithril", "mithril", {});
@@ -154,23 +153,30 @@ module.exports = {
  * @param callback {error, success}
  */
 function validate(token, h) {
-  let valid = new Date().getTime() < token.expiry;
-  return {isValid: valid};
+    let valid = new Date().getTime() < token.expiry;
+    return {isValid: valid};
 }
 
 
 /**
-* Return the cookie configuration from config.json.
-*/
+ * Return the cookie configuration from config.json.
+ */
 function cookie() {
     return Config.load('authentication').cookie;
 }
 
 /**
-* Grabs the remote IP of the client, supports extracting the
-* X-Forwarded-For header but always includes both the header value
-* and the proxy's IP address (to prevent spoofing the logs).
-*/
+ * @returns the name of the cookie to be used.
+ */
+function cookieName() {
+    return Config.load('authentication').cookieName || "mithril";
+}
+
+/**
+ * Grabs the remote IP of the client, supports extracting the
+ * X-Forwarded-For header but always includes both the header value
+ * and the proxy's IP address (to prevent spoofing the logs).
+ */
 function source(request) {
     return {
         ip: request.info.remoteAddress,

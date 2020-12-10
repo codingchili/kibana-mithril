@@ -10,7 +10,8 @@
         "remote": "localhost:5601"
     },
     "authentication": {
-        "kbnVersion": "6.6.0",
+        "kbnVersion": "7.0.0-beta1",
+        "cookieName": "mithril",
         "cookie": {
             "ttl": 1209600,
             "path": "/",

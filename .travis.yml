@@ -20,7 +20,7 @@ install:
 script:
   - mocha test --recursive -u tdd --exit
 before_deploy:
-  - "./release.sh 6.6.0"
+  - "./release.sh 6.6.1"
   - "./release.sh 7.10.1"
 deploy:
   provider: releases

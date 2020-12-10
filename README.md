@@ -5,7 +5,7 @@ A plugin that adds authentication to Kibana dashboards! [YouTube demo](https://w
 
 # Installing
 To install the plugin use the kibana-plugin utility, example:
-```
+```console
 ./kibana-plugin install 'https://github.com/codingchili/kibana-mithril/releases/download/1.2.1/mithril-windows-x86_64-7.0.0-beta1.zip'
 ```
 
@@ -18,7 +18,7 @@ If there are no releases for your specific version/platform combination please s
 - Mithril 1.2.1 supports using a basePath if rewriteBasePath is set to true. (default in 7.0.0).
 
 To add a new user run the adduser utility, not supported in LDAP mode.
-```
+```console
 node adduser.js USERNAME PASSWORD
 ```
 
@@ -72,7 +72,7 @@ If you are using file-based authentication, make sure to remove the default user
 
 ### Building the plugin
 To check out the sources and build the plugin do the following
-```
+```console
 git clone https://github.com/codingchili/kibana-mithril
 cd kibana-mithril
 npm install
@@ -80,7 +80,7 @@ mocha test --recursive -u tdd
 ```
 
 **To build an installable zip run the following script**
-```
+```console
 # make sure to match the kibana version
 ./release.sh <kibana-version>
 # example:
@@ -101,7 +101,7 @@ jq needs to be installed and available on the path for the script to work.
 - jq
 
 To compile the binary module argon2-ffi build tools are requried, install with
-```
+```console
 windows: 
   npm install --global --production windows-build-tools
 unix:    
@@ -113,8 +113,8 @@ This installs MS build tools and python 2.7 and is required for node-gyp to work
 If the Kibana instance is already running it may be set to reload all plugins on change, if not then try restarting the instance.
 
 **Kibana compatibility matrix**
-- 1.1.0 is compatible with 5.6.4 -> 6.3.2
-- 1.2.0 is compatible with 6.6.0 -> 7.0.0-beta1
+- 1.1.0 is compatible with 5.6.4 -> 6.3.2 (requires editing package.json version)
+- 1.2.1 is compatible with 6.6.0, 6.6.1 and 7.0.0-beta1.
 
 **If you have issues installing the plugin**,
 - make sure that the version in package.json is matching your kibana version.
