@@ -8,16 +8,20 @@ const LDAP = require('ldapjs');
 const Config = require('../config').load('ldap');
 const File = require('./file');
 const client = LDAP.createClient({url: Config.url});
+const Logger = require('../logger');
 
 client.bind(Config.admin.dn, Config.admin.password, err => {
     if (err)
         throw err;
 });
 
+client.on('error', (err) => Logger.log(`LDAP Error: ${err.message} - will attempt to recover.`));
+
 function member(id, callback) {
     const search = {
         dn: Config.search["group-dn"],
         options: {
+            reconnect: true,
             scope: Config.search.scope,
             filter: new LDAP.filters.AndFilter({
                 filters: [
