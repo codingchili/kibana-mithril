@@ -6,7 +6,7 @@ A plugin that adds authentication to Kibana dashboards! [YouTube demo](https://w
 # Installing
 To install the plugin use the kibana-plugin utility, example:
 ```console
-./kibana-plugin install 'https://github.com/codingchili/kibana-mithril/releases/download/1.2.1/mithril-windows-x86_64-7.0.0-beta1.zip'
+./kibana-plugin install 'https://github.com/codingchili/kibana-mithril/releases/download/1.2.2/mithril-windows-x86_64-7.0.0-beta1.zip'
 ```
 
 *Make sure that the kibana version and platform matches.*
@@ -14,8 +14,8 @@ To install the plugin use the kibana-plugin utility, example:
 If there are no releases for your specific version/platform combination please submit a request or build it yourself.
 
 - Default username and password is: 'username' and 'password' for the file storage.
-- Mithril 1.2.1 can coexist with the free version of X-Pack (not gold/plat).
-- Mithril 1.2.1 supports using a basePath if rewriteBasePath is set to true. (default in 7.0.0).
+- Mithril 1.2.X can coexist with the free version of X-Pack (not gold/plat).
+- Mithril 1.2.X supports using a basePath if rewriteBasePath is set to true. (default in 7.0.0).
 
 To add a new user run the adduser utility, not supported in LDAP mode.
 ```console
@@ -114,7 +114,7 @@ If the Kibana instance is already running it may be set to reload all plugins on
 
 **Kibana compatibility matrix**
 - 1.1.0 is compatible with 5.6.4 -> 6.3.2 (requires editing package.json version)
-- 1.2.1 is compatible with 6.6.0, 6.6.1 and 7.0.0-beta1.
+- 1.2.X is compatible with 6.6.1 and 7.10.1.
 
 **If you have issues installing the plugin**,
 - make sure that the version in package.json is matching your kibana version.

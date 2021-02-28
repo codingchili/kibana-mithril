@@ -1,6 +1,6 @@
 {
   "name": "kibana-mithril",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Prevents unauthorized access to kbn dashboards.",
   "repository": "https://github.com/codingchili/kibana-mithril",
   "license": "MIT",
