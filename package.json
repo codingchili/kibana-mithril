@@ -18,7 +18,7 @@
     "jsonwebtoken": "^8.1.0",
     "ldapjs": "^1.0.1",
     "mongoose": "^5.7.5",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "qr-image": "^3.2.0",
     "request": "^2.83.0",
     "speakeasy": "^2.0.0",
