@@ -1,6 +1,9 @@
 # kibana-mithril [![Build Status](https://travis-ci.org/codingchili/kibana-mithril.svg?branch=master)](https://travis-ci.org/codingchili/kibana-mithril)
 A plugin that adds authentication to Kibana dashboards! [YouTube demo](https://www.youtube.com/watch?v=vvUdpPQhBjk)
 
+| ⚠️⚠️⚠️ This plugin depends on outdated third-party dependencies with known vulnerabilities. ⚠️⚠️⚠️ |
+| --- |
+
 ![key setup](https://raw.githubusercontent.com/codingchili/kibana-mithril/master/key-setup.png)
 
 # Installing
