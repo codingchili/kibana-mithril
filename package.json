@@ -15,7 +15,7 @@
     "hapi": "^17.5.3",
     "hapi-auth-basic": "^4.2.0",
     "hapi-auth-jwt2": "^8.3.0",
-    "jsonwebtoken": "^8.1.0",
+    "jsonwebtoken": "^9.0.0",
     "ldapjs": "^1.0.1",
     "mongoose": "^5.7.5",
     "pug": "^2.0.3",
